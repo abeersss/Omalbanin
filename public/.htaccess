@@ -1,13 +1,29 @@
 # Omalbnin.com - legacy WordPress URL → new site 301 redirects
 # Generated from the pre-migration crawl in audit/AUDIT_NOTES.md (2026-08-07).
 #
-# NOTE ON MATCHING: mod_alias (Redirect/RedirectMatch) matches the *decoded*
-# URL-path, so percent-encoded patterns never fire there. The Arabic legacy
-# URLs are therefore matched with mod_rewrite against %{REQUEST_URI}, which is
-# the raw, still-encoded request URI. [NC] covers clients that send uppercase
-# hex (most browsers) as well as the lowercase form WordPress used in its hrefs.
+# NOTE ON MATCHING: the Arabic legacy URLs are matched twice, deliberately.
+#
+# mod_alias (Redirect/RedirectMatch) matches the decoded URL-path, so
+# percent-encoded patterns never fire there. mod_rewrite's %{REQUEST_URI} is
+# raw and still-encoded on Apache, but this host runs LiteSpeed, which hands
+# it over already decoded. Verified against the live server: the encoded-only
+# rules returned 404 for every Arabic URL while the ASCII ones redirected fine.
+#
+# So each Arabic slug gets a literal (decoded) RewriteRule, which is what
+# actually fires here, plus the encoded %{REQUEST_URI} form kept below as a
+# fallback should this ever move to stock Apache. This file is UTF-8.
 
 RewriteEngine On
+
+# --- Arabic legacy slugs, decoded form (this is what fires on LiteSpeed) ---
+RewriteRule ^زيارة-عاشوراء/?$ /ar/ziyarat/ziyarat-ashura/ [R=301,L]
+RewriteRule ^قصيدة-في-حب-الامام-الحسين-عليه-السلام/?$ /ar/collections/poem-imam-husayn/ [R=301,L]
+RewriteRule ^الامام-محمد-الجواد-عليه-السلام/?$ /ar/duas/imam-al-jawad-qunut/ [R=301,L]
+RewriteRule ^الايمان-كله/?$ /ar/collections/al-iman-kulluh/ [R=301,L]
+RewriteRule ^حديث-الكساء/?$ /ar/hadith-al-kisa/ [R=301,L]
+RewriteRule ^سفرة-السيدة-نفيسة-عليها-السلام-2/?$ /ar/collections/sofra-sayyida-nafisa/ [R=301,L]
+RewriteRule ^سفرة-السيدة-أم-البنين-عليها-السلام/?$ /ar/collections/sofra-umm-al-banin/ [R=301,L]
+RewriteRule ^زيارة-العباس-عليه-السلام/?$ /ar/ziyarat/ziyarat-abbas/ [R=301,L]
 
 # --- Ziyarat Ashura ---
 RewriteCond %{REQUEST_URI} ^/%d8%b2%d9%8a%d8%a7%d8%b1%d8%a9-%d8%b9%d8%a7%d8%b4%d9%88%d8%b1%d8%a7%d8%a1/?$ [NC]
