@@ -1,0 +1,72 @@
+# Omalbnin.com — legacy WordPress URL → new site 301 redirects
+# Generated from the pre-migration crawl in audit/AUDIT_NOTES.md (2026-08-07).
+#
+# NOTE ON MATCHING: mod_alias (Redirect/RedirectMatch) matches the *decoded*
+# URL-path, so percent-encoded patterns never fire there. The Arabic legacy
+# URLs are therefore matched with mod_rewrite against %{REQUEST_URI}, which is
+# the raw, still-encoded request URI. [NC] covers clients that send uppercase
+# hex (most browsers) as well as the lowercase form WordPress used in its hrefs.
+
+RewriteEngine On
+
+# --- Ziyarat Ashura ---
+RewriteCond %{REQUEST_URI} ^/%d8%b2%d9%8a%d8%a7%d8%b1%d8%a9-%d8%b9%d8%a7%d8%b4%d9%88%d8%b1%d8%a7%d8%a1/?$ [NC]
+RewriteRule ^ /ar/ziyarat/ziyarat-ashura/ [R=301,L]
+
+# --- Poem in love of Imam Husayn ---
+RewriteCond %{REQUEST_URI} ^/%d9%82%d8%b5%d9%8a%d8%af%d8%a9-%d9%81%d9%8a-%d8%ad%d8%a8-%d8%a7%d9%84%d8%a7%d9%85%d8%a7%d9%85-%d8%a7%d9%84%d8%ad%d8%b3%d9%8a%d9%86-%d8%b9%d9%84%d9%8a%d9%87-%d8%a7%d9%84%d8%b3%d9%84%d8%a7%d9%85/?$ [NC]
+RewriteRule ^ /ar/collections/poem-imam-husayn/ [R=301,L]
+
+# --- Imam Muhammad al-Jawad (qunut duas) ---
+RewriteCond %{REQUEST_URI} ^/%d8%a7%d9%84%d8%a7%d9%85%d8%a7%d9%85-%d9%85%d8%ad%d9%85%d8%af-%d8%a7%d9%84%d8%ac%d9%88%d8%a7%d8%af-%d8%b9%d9%84%d9%8a%d9%87-%d8%a7%d9%84%d8%b3%d9%84%d8%a7%d9%85/?$ [NC]
+RewriteRule ^ /ar/duas/imam-al-jawad-qunut/ [R=301,L]
+
+# --- Al-Iman Kulluh (Imam Ali) ---
+RewriteCond %{REQUEST_URI} ^/%d8%a7%d9%84%d8%a7%d9%8a%d9%85%d8%a7%d9%86-%d9%83%d9%84%d9%87/?$ [NC]
+RewriteRule ^ /ar/collections/al-iman-kulluh/ [R=301,L]
+
+# --- Hadith al-Kisa ---
+RewriteCond %{REQUEST_URI} ^/%d8%ad%d8%af%d9%8a%d8%ab-%d8%a7%d9%84%d9%83%d8%b3%d8%a7%d8%a1/?$ [NC]
+RewriteRule ^ /ar/hadith-al-kisa/ [R=301,L]
+
+# --- Sofra al-Sayyida Nafisa (original had a "-2" suffix and no trailing slash) ---
+RewriteCond %{REQUEST_URI} ^/%d8%b3%d9%81%d8%b1%d8%a9-%d8%a7%d9%84%d8%b3%d9%8a%d8%af%d8%a9-%d9%86%d9%81%d9%8a%d8%b3%d8%a9-%d8%b9%d9%84%d9%8a%d9%87%d8%a7-%d8%a7%d9%84%d8%b3%d9%84%d8%a7%d9%85-2/?$ [NC]
+RewriteRule ^ /ar/collections/sofra-sayyida-nafisa/ [R=301,L]
+
+# --- Sofra Umm al-Banin ---
+RewriteCond %{REQUEST_URI} ^/%d8%b3%d9%81%d8%b1%d8%a9-%d8%a7%d9%84%d8%b3%d9%8a%d8%af%d8%a9-%d8%a3%d9%85-%d8%a7%d9%84%d8%a8%d9%86%d9%8a%d9%86-%d8%b9%d9%84%d9%8a%d9%87%d8%a7-%d8%a7%d9%84%d8%b3%d9%84%d8%a7%d9%85/?$ [NC]
+RewriteRule ^ /ar/collections/sofra-umm-al-banin/ [R=301,L]
+
+# --- Ziyarat al-Abbas (both the corrupted original href and the corrected form) ---
+RewriteCond %{REQUEST_URI} ^/%d8%b2%d9%8a%d8%a7%d8%b1%d8%a9-%d8%a7%d9%84%d8%b9%d8%a8%d8%a7%d8%b3-%d8%b9%d9%84%d9%8a%d9%87-%d8%a7%d9%84%b5%d9%84%d8%a7%d9%85/?$ [NC,OR]
+RewriteCond %{REQUEST_URI} ^/%d8%b2%d9%8a%d8%a7%d8%b1%d8%a9-%d8%a7%d9%84%d8%b9%d8%a8%d8%a7%d8%b3-%d8%b9%d9%84%d9%8a%d9%87-%d8%a7%d9%84%d8%b3%d9%84%d8%a7%d9%85/?$ [NC]
+RewriteRule ^ /ar/ziyarat/ziyarat-abbas/ [R=301,L]
+
+# --- ASCII legacy slugs (safe for mod_alias-style matching via rewrite) ---
+RewriteRule ^abdullah-alhattab/?$ /ar/collections/abdullah-alhattab/ [R=301,L,NC]
+RewriteRule ^sample-page/?$ /ar/collections/sofra-al-khidr/ [R=301,L,NC]
+
+# --- Legacy WordPress media that is now served from this site ---
+# Keeps externally-linked old image URLs alive after WordPress is removed.
+RewriteRule ^wp-content/uploads/2023/03/ur-6\.png$ /images/legacy/ur-6.png [R=301,L,NC]
+RewriteRule ^wp-content/uploads/2023/03/ur-5\.png$ /images/legacy/ur-5.png [R=301,L,NC]
+RewriteRule ^wp-content/uploads/2023/03/ur-4-1024x576\.png$ /images/legacy/ur-4-1024x576.png [R=301,L,NC]
+RewriteRule ^wp-content/uploads/2023/09/WhatsApp-Image-2023-09-02-at-11\.14\.15-AM-1024x768\.jpeg$ /images/legacy/WhatsApp-Image-2023-09-02-at-11.14.15-AM-1024x768.jpeg [R=301,L,NC]
+
+# --- Bare domain root → default locale ---
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^$ /ar/ [R=301,L]
+
+# Custom 404
+ErrorDocument 404 /404.html
+
+# Basic caching for static assets
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>

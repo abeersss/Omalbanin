@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #faf6ee;
+  --bg-elevated: #ffffff;
+  --ink: #23231f;
+  --ink-soft: #5c584e;
+  --primary: #1f5f52;
+  --primary-dark: #143f37;
+  --accent: #b08a3e;
+  --accent-soft: #e9dcc0;
+  --border: #e7ded0;
+  --card: #ffffff;
+  --ring: #1f5f52;
+}
+
+.dark {
+  --bg: #14171a;
+  --bg-elevated: #1b1f22;
+  --ink: #eee9dd;
+  --ink-soft: #b7b0a0;
+  --primary: #5fb3a1;
+  --primary-dark: #3f8577;
+  --accent: #d7b463;
+  --accent-soft: #2a2620;
+  --border: #2b302f;
+  --card: #1b1f22;
+  --ring: #5fb3a1;
+}
+
+/* "reading" mode = sepia-tinted, extra-calm variant layered on top of light/dark */
+.reading {
+  --bg: #f4ecd8;
+  --bg-elevated: #f9f2e2;
+  --ink: #2c2416;
+  --card: #f9f2e2;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --font-arabic: "SF Arabic", "Segoe UI", "Geeza Pro", "Noto Kufi Arabic", "Dubai", Tahoma, Arial, sans-serif;
+  --font-latin: "SF Pro Text", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+html[dir="rtl"] body {
+  font-family: var(--font-arabic);
+}
+html[dir="ltr"] body {
+  font-family: var(--font-latin);
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Islamic geometric motif — subtle, decorative only */
+.motif-bg {
+  background-image: radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+@media print {
+  header, footer, .no-print {
+    display: none !important;
+  }
+}
