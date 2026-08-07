@@ -1,4 +1,5 @@
 import { ContentItem } from "./types";
+import { divisionsFor } from "./templates";
 
 /**
  * Ziyarat Library index. Ziyarat Ashura, Ziyarat al-Abbas, and Ziyarat Umm
@@ -17,9 +18,7 @@ export const ziyaratPlaceholders: ContentItem[] = [
     title_en: "Ziyarat Waritha",
     summary_ar: "إحدى زيارات الإمام الحسين عليه السلام المشهورة.",
     summary_en: "One of the well-known visitations of Imam Husayn.",
-    body: [
-      { kind: "text", text_ar: "النص الكامل والمحقق لهذه الزيارة لم يُرفع بعد إلى هذا الموقع.", text_en: "The complete, verified text has not yet been added." },
-    ],
+    body: divisionsFor("ziyarat-warith"),
     source: { name_ar: "مصدر يحتاج إلى تحقق", name_en: "Source attribution requires verification" },
     verification_status: "needs_verification",
     related_person: ["imam-husayn"],
@@ -34,9 +33,7 @@ export const ziyaratPlaceholders: ContentItem[] = [
     title_en: "Ziyarat Amin Allah",
     summary_ar: "زيارة جامعة تُقرأ عند مراقد المعصومين عليهم السلام.",
     summary_en: "A general visitation recited at the shrines of the Infallibles.",
-    body: [
-      { kind: "text", text_ar: "النص الكامل والمحقق لهذه الزيارة لم يُرفع بعد إلى هذا الموقع.", text_en: "The complete, verified text has not yet been added." },
-    ],
+    body: divisionsFor("ziyarat-amin-allah"),
     source: { name_ar: "مصدر يحتاج إلى تحقق", name_en: "Source attribution requires verification" },
     verification_status: "needs_verification",
     published: false,
@@ -50,9 +47,7 @@ export const ziyaratPlaceholders: ContentItem[] = [
     title_en: "Ziyarat al-Jami'a al-Kabira",
     summary_ar: "زيارة جامعة منسوبة إلى الإمام علي الهادي عليه السلام.",
     summary_en: "A comprehensive visitation attributed to Imam Ali al-Hadi.",
-    body: [
-      { kind: "text", text_ar: "النص الكامل والمحقق لهذه الزيارة لم يُرفع بعد إلى هذا الموقع.", text_en: "The complete, verified text has not yet been added." },
-    ],
+    body: divisionsFor("ziyarat-jamia-kabira"),
     source: { name_ar: "مصدر يحتاج إلى تحقق", name_en: "Source attribution requires verification" },
     verification_status: "needs_verification",
     related_person: ["imam-al-hadi"],

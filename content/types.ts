@@ -29,6 +29,18 @@ export interface BodyBlock {
   heading_en?: string;
   text_ar?: string;
   text_en?: string;
+  /** Recitation count for sections repeated a fixed number of times. Shown as a
+   * badge on the section; it is display metadata, not part of the text. */
+  repeat?: number;
+  /** Instruction shown above a section (etiquette, posture, when to recite).
+   * Deliberately separate from text_ar so guidance is never mistaken for the
+   * devotional text itself. */
+  note_ar?: string;
+  note_en?: string;
+  /** True while this section is an empty division awaiting the site owner's
+   * text. The reader renders a visible placeholder instead of a blank gap, and
+   * nothing is ever auto-filled. */
+  awaitingText?: boolean;
   imageUrl?: string;
   imageAlt_ar?: string;
   imageAlt_en?: string;

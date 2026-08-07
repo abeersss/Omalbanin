@@ -1,4 +1,5 @@
 import { ContentItem } from "./types";
+import { divisionsFor } from "./templates";
 
 /**
  * Dua Library. Two entries below carry real migrated text (see legacy.ts -
@@ -98,13 +99,7 @@ export const duas: ContentItem[] = [
     title_en: "Dua Kumayl",
     summary_ar: "دعاء مروي عن الإمام علي عليه السلام لكميل بن زياد، يُستحب ليلة النصف من شعبان وليالي الجمعة.",
     summary_en: "A supplication taught by Imam Ali to Kumayl ibn Ziyad, recommended on the night of mid-Sha'ban and Thursday/Friday nights.",
-    body: [
-      {
-        kind: "text",
-        text_ar: "النص الكامل والمحقق لهذا الدعاء لم يُرفع بعد إلى هذا الموقع. سيُضاف فور توفر نسخة موثوقة تُقابَل مع طبعة معتمدة من مفاتيح الجنان.",
-        text_en: "The complete, verified text of this supplication has not yet been added to this site. It will be published once checked against a reliable Mafatih al-Jinan edition.",
-      },
-    ],
+    body: divisionsFor("dua-kumayl"),
     source: { name_ar: "مصدر يحتاج إلى تحقق", name_en: "Source attribution requires verification" },
     verification_status: "needs_verification",
     weekday: "friday",
@@ -121,13 +116,7 @@ export const duas: ContentItem[] = [
     title_en: "Dua al-Tawassul",
     summary_ar: "دعاء التوسل بالمعصومين الأربعة عشر عليهم السلام.",
     summary_en: "A supplication invoking intercession through the Fourteen Infallibles.",
-    body: [
-      {
-        kind: "text",
-        text_ar: "النص الكامل والمحقق لهذا الدعاء لم يُرفع بعد إلى هذا الموقع.",
-        text_en: "The complete, verified text of this supplication has not yet been added to this site.",
-      },
-    ],
+    body: divisionsFor("dua-tawassul"),
     source: { name_ar: "مصدر يحتاج إلى تحقق", name_en: "Source attribution requires verification" },
     verification_status: "needs_verification",
     tags_ar: ["التوسل"],
@@ -143,13 +132,7 @@ export const duas: ContentItem[] = [
     title_en: "Dua al-Nudba",
     summary_ar: "دعاء يُستحب قراءته صباح كل جمعة، ويعبّر عن التوجع لغيبة الإمام المهدي عجل الله فرجه.",
     summary_en: "A supplication recommended every Friday morning, expressing yearning for the reappearance of Imam al-Mahdi.",
-    body: [
-      {
-        kind: "text",
-        text_ar: "النص الكامل والمحقق لهذا الدعاء لم يُرفع بعد إلى هذا الموقع.",
-        text_en: "The complete, verified text of this supplication has not yet been added to this site.",
-      },
-    ],
+    body: divisionsFor("dua-nudba"),
     source: { name_ar: "مصدر يحتاج إلى تحقق", name_en: "Source attribution requires verification" },
     verification_status: "needs_verification",
     weekday: "friday",

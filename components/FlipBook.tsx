@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Locale, t } from "@/lib/i18n";
+import { Locale } from "@/lib/i18n";
 import { BodyBlock } from "@/content/types";
+import SectionBlock from "./SectionBlock";
 
 /**
  * Book-style reader.
@@ -165,41 +166,7 @@ export default function FlipBook({
             >
               {body.map((block, i) => (
                 <div key={i} className="mb-6" style={{ breakInside: "avoid-column" }}>
-                  {(block.heading_ar || block.heading_en) && (
-                    <h2 className="mb-3 text-lg font-bold text-[var(--primary)]">
-                      {locale === "ar" ? block.heading_ar : block.heading_en ?? block.heading_ar}
-                    </h2>
-                  )}
-                  {block.kind === "text" && (
-                    <p className="whitespace-pre-line text-[var(--ink)]">
-                      {locale === "ar" ? block.text_ar : block.text_en ?? block.text_ar}
-                    </p>
-                  )}
-                  {block.kind === "image" && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={block.imageUrl}
-                      alt={(locale === "ar" ? block.imageAlt_ar : block.imageAlt_en) || ""}
-                      className="mx-auto max-w-full rounded-lg border border-[var(--border)]"
-                      loading="lazy"
-                      onLoad={measure}
-                    />
-                  )}
-                  {block.kind === "embed" && (
-                    <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] p-3">
-                      <p className="mb-2 text-xs text-[var(--ink-soft)]">
-                        {t(locale, "external_embed_notice")}
-                      </p>
-                      <a
-                        href={block.embedUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm font-medium text-[var(--primary)] underline underline-offset-2"
-                      >
-                        {(locale === "ar" ? block.embedLabel_ar : block.embedLabel_en) || block.embedUrl}
-                      </a>
-                    </div>
-                  )}
+                  <SectionBlock block={block} locale={locale} compact />
                 </div>
               ))}
             </div>

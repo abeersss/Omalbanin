@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Locale, t } from "@/lib/i18n";
 import { BodyBlock } from "@/content/types";
 import FlipBook from "./FlipBook";
+import SectionBlock from "./SectionBlock";
 
 const FONT_STEPS = [0.9, 1, 1.15, 1.3, 1.5];
 type ReadMode = "scroll" | "book";
@@ -159,38 +160,7 @@ export default function ContentReader({
       >
         {body.map((block, i) => (
           <div key={i}>
-            {(block.heading_ar || block.heading_en) && (
-              <h2 className="mb-3 text-xl font-bold text-[var(--primary)]">
-                {locale === "ar" ? block.heading_ar : block.heading_en ?? block.heading_ar}
-              </h2>
-            )}
-            {block.kind === "text" && (
-              <p className="whitespace-pre-line text-[var(--ink)]">
-                {locale === "ar" ? block.text_ar : block.text_en ?? block.text_ar}
-              </p>
-            )}
-            {block.kind === "image" && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={block.imageUrl}
-                alt={(locale === "ar" ? block.imageAlt_ar : block.imageAlt_en) || ""}
-                className="mx-auto max-w-full rounded-xl border border-[var(--border)]"
-                loading="lazy"
-              />
-            )}
-            {block.kind === "embed" && (
-              <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">
-                <p className="mb-2 text-xs text-[var(--ink-soft)]">{t(locale, "external_embed_notice")}</p>
-                <a
-                  href={block.embedUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium text-[var(--primary)] underline underline-offset-2"
-                >
-                  {(locale === "ar" ? block.embedLabel_ar : block.embedLabel_en) || block.embedUrl}
-                </a>
-              </div>
-            )}
+            <SectionBlock block={block} locale={locale} />
           </div>
         ))}
       </article>
