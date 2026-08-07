@@ -86,9 +86,10 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
   const [isAdmin, setIsAdmin] = useState(true);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
+  // `loading` already starts true, so this does not set it synchronously; the
+  // first state update happens after the awaited round trip resolves.
   const load = useCallback(async () => {
     if (!sb) return;
-    setLoading(true);
     const [{ data: content }, { data: s }, { data: adminOk }] = await Promise.all([
       sb.from("content_items").select("slug, body, published"),
       sb.from("site_settings").select("*").eq("id", 1).maybeSingle(),
@@ -103,6 +104,9 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
   }, [sb]);
 
   useEffect(() => {
+    // False positive: load() is async and awaits Supabase before touching
+    // state, so nothing is set synchronously during this effect.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     load();
   }, [load]);
 

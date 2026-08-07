@@ -9,14 +9,14 @@ import AdminDashboard from "./AdminDashboard";
 
 export default function AdminApp({ locale }: { locale: Locale }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [ready, setReady] = useState(false);
+  // When Supabase is not configured there is no session to wait for, so start
+  // ready. This is known at module scope, which keeps the effect below free of
+  // a synchronous setState.
+  const [ready, setReady] = useState(!supabaseConfigured);
 
   useEffect(() => {
     const sb = getSupabase();
-    if (!sb) {
-      setReady(true);
-      return;
-    }
+    if (!sb) return;
     sb.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setReady(true);
