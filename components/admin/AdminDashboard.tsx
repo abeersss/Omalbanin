@@ -1,0 +1,386 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { Session } from "@supabase/supabase-js";
+import { getSupabase, SiteSettingsRow } from "@/lib/supabase";
+import { Locale } from "@/lib/i18n";
+import { allContent, BodyBlock, ContentItem } from "@/content";
+import SectionEditor from "./SectionEditor";
+
+const copy = {
+  ar: {
+    title: "لوحة الإدارة",
+    signOut: "تسجيل الخروج",
+    tabOverview: "نظرة عامة",
+    tabContent: "المحتوى",
+    tabSettings: "الإعدادات",
+    published: "منشور",
+    drafts: "غير منشور",
+    emptySections: "أقسام فارغة",
+    totalItems: "إجمالي النصوص",
+    edit: "تحرير",
+    back: "رجوع إلى القائمة",
+    save: "حفظ",
+    saving: "جارٍ الحفظ...",
+    saved: "تم الحفظ",
+    publish: "نشر هذا النص للزوار",
+    publishHint: "لا تنشر إلا بعد مراجعة النص كاملاً.",
+    addSection: "إضافة قسم جديد",
+    newSection: "قسم جديد",
+    hijri: "تعديل التاريخ الهجري (بالأيام)",
+    hijriHint: "استخدم +1 أو -1 حسب رؤية الهلال.",
+    featuredDua: "دعاء اليوم المختار",
+    featuredZiyara: "زيارة اليوم المختارة",
+    auto: "تلقائي",
+    notAdmin: "هذا الحساب ليس لديه صلاحية الإدارة.",
+    loading: "جارٍ التحميل...",
+    progress: "مكتمل",
+    error: "تعذر الحفظ. حاول مرة أخرى.",
+  },
+  en: {
+    title: "Admin dashboard",
+    signOut: "Sign out",
+    tabOverview: "Overview",
+    tabContent: "Content",
+    tabSettings: "Settings",
+    published: "Published",
+    drafts: "Unpublished",
+    emptySections: "Empty sections",
+    totalItems: "Total texts",
+    edit: "Edit",
+    back: "Back to list",
+    save: "Save",
+    saving: "Saving...",
+    saved: "Saved",
+    publish: "Publish this text to visitors",
+    publishHint: "Only publish once the text has been fully reviewed.",
+    addSection: "Add a new section",
+    newSection: "New section",
+    hijri: "Hijri date adjustment (days)",
+    hijriHint: "Use +1 or -1 according to the moon sighting.",
+    featuredDua: "Featured dua of the day",
+    featuredZiyara: "Featured ziyara of the day",
+    auto: "Automatic",
+    notAdmin: "This account does not have admin access.",
+    loading: "Loading...",
+    progress: "complete",
+    error: "Could not save. Please try again.",
+  },
+};
+
+type Row = {
+  slug: string;
+  body: BodyBlock[];
+  published: boolean;
+};
+
+export default function AdminDashboard({ session, locale }: { session: Session; locale: Locale }) {
+  const c = copy[locale] ?? copy.ar;
+  const sb = getSupabase();
+
+  const [tab, setTab] = useState<"overview" | "content" | "settings">("overview");
+  const [rows, setRows] = useState<Record<string, Row>>({});
+  const [editing, setEditing] = useState<string | null>(null);
+  const [settings, setSettings] = useState<SiteSettingsRow | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(true);
+  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+
+  const load = useCallback(async () => {
+    if (!sb) return;
+    setLoading(true);
+    const [{ data: content }, { data: s }, { data: adminOk }] = await Promise.all([
+      sb.from("content_items").select("slug, body, published"),
+      sb.from("site_settings").select("*").eq("id", 1).maybeSingle(),
+      sb.rpc("is_admin"),
+    ]);
+    const map: Record<string, Row> = {};
+    for (const r of content ?? []) map[r.slug] = r as Row;
+    setRows(map);
+    setSettings((s as SiteSettingsRow) ?? null);
+    setIsAdmin(adminOk === true);
+    setLoading(false);
+  }, [sb]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  /** Bundled content is the starting point; a saved row overrides it. This
+   *  avoids a separate seeding step, so the dashboard is usable immediately. */
+  const items = useMemo(
+    () =>
+      allContent.map((item: ContentItem) => {
+        const row = rows[item.slug];
+        return {
+          ...item,
+          body: row?.body ?? item.body,
+          published: row?.published ?? item.published,
+        };
+      }),
+    [rows],
+  );
+
+  const current = items.find((i) => i.slug === editing) ?? null;
+
+  const stats = useMemo(() => {
+    const emptySections = items.reduce(
+      (n, i) => n + i.body.filter((b) => b.kind === "text" && !b.text_ar?.trim()).length,
+      0,
+    );
+    const filled = items.reduce(
+      (n, i) => n + i.body.filter((b) => b.kind === "text" && b.text_ar?.trim()).length,
+      0,
+    );
+    return {
+      published: items.filter((i) => i.published).length,
+      drafts: items.filter((i) => !i.published).length,
+      total: items.length,
+      emptySections,
+      percent: filled + emptySections === 0 ? 100 : Math.round((filled / (filled + emptySections)) * 100),
+    };
+  }, [items]);
+
+  async function saveItem(slug: string, body: BodyBlock[], published: boolean) {
+    if (!sb || !current) return;
+    setStatus("saving");
+    const { error } = await sb.from("content_items").upsert(
+      {
+        slug,
+        type: current.type,
+        title_ar: current.title_ar,
+        title_en: current.title_en,
+        summary_ar: current.summary_ar ?? "",
+        summary_en: current.summary_en ?? "",
+        body,
+        published,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "slug" },
+    );
+    if (error) {
+      setStatus("error");
+      return;
+    }
+    setRows((r) => ({ ...r, [slug]: { slug, body, published } }));
+    setStatus("saved");
+    window.setTimeout(() => setStatus("idle"), 1800);
+  }
+
+  async function saveSettings(patch: Partial<SiteSettingsRow>) {
+    if (!sb) return;
+    setStatus("saving");
+    const next = { ...(settings ?? { id: 1, hijri_adjustment_days: 0, featured_dua_slug: null, featured_ziyara_slug: null }), ...patch };
+    const { error } = await sb.from("site_settings").upsert({ ...next, id: 1 }, { onConflict: "id" });
+    if (error) {
+      setStatus("error");
+      return;
+    }
+    setSettings(next as SiteSettingsRow);
+    setStatus("saved");
+    window.setTimeout(() => setStatus("idle"), 1800);
+  }
+
+  if (loading) return <p className="px-4 py-16 text-center text-[var(--ink-soft)]">{c.loading}</p>;
+  if (!isAdmin)
+    return (
+      <div className="mx-auto max-w-md px-4 py-16 text-center">
+        <p className="mb-4 text-[var(--ink-soft)]">{c.notAdmin}</p>
+        <button onClick={() => sb?.auth.signOut()} className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm">
+          {c.signOut}
+        </button>
+      </div>
+    );
+
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-8">
+      <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--primary)]">{c.title}</h1>
+          <p className="text-xs text-[var(--ink-soft)]">{session.user.email}</p>
+        </div>
+        <div className="flex items-center gap-3">
+          {status === "saving" && <span className="text-xs text-[var(--ink-soft)]">{c.saving}</span>}
+          {status === "saved" && <span className="text-xs text-[var(--primary)]">{c.saved}</span>}
+          {status === "error" && <span className="text-xs text-red-600">{c.error}</span>}
+          <button onClick={() => sb?.auth.signOut()} className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs">
+            {c.signOut}
+          </button>
+        </div>
+      </header>
+
+      {!editing && (
+        <nav className="mb-6 flex gap-1 rounded-full border border-[var(--border)] p-1">
+          {([["overview", c.tabOverview], ["content", c.tabContent], ["settings", c.tabSettings]] as const).map(
+            ([k, label]) => (
+              <button
+                key={k}
+                onClick={() => setTab(k)}
+                className={`flex-1 rounded-full px-3 py-1.5 text-sm ${
+                  tab === k ? "bg-[var(--primary)] text-white" : "text-[var(--ink-soft)]"
+                }`}
+              >
+                {label}
+              </button>
+            ),
+          )}
+        </nav>
+      )}
+
+      {!editing && tab === "overview" && (
+        <div className="grid gap-4 sm:grid-cols-2">
+          {[
+            [c.totalItems, stats.total],
+            [c.published, stats.published],
+            [c.drafts, stats.drafts],
+            [c.emptySections, stats.emptySections],
+          ].map(([label, value]) => (
+            <div key={String(label)} className="illuminated px-5 py-6">
+              <p className="text-3xl font-bold text-[var(--primary)]">{value}</p>
+              <p className="mt-1 text-sm text-[var(--ink-soft)]">{label}</p>
+            </div>
+          ))}
+          <div className="illuminated px-5 py-6 sm:col-span-2">
+            <div className="mb-2 flex items-center justify-between text-sm">
+              <span className="text-[var(--ink-soft)]">{c.progress}</span>
+              <span className="font-bold text-[var(--primary)]">{stats.percent}%</span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--border)]">
+              <div className="h-full bg-[var(--primary)] transition-all" style={{ width: `${stats.percent}%` }} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!editing && tab === "content" && (
+        <ul className="space-y-2">
+          {items.map((i) => {
+            const empty = i.body.filter((b) => b.kind === "text" && !b.text_ar?.trim()).length;
+            return (
+              <li
+                key={i.slug}
+                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3"
+              >
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{locale === "ar" ? i.title_ar : i.title_en}</p>
+                  <p className="text-xs text-[var(--ink-soft)]">
+                    {i.published ? c.published : c.drafts}
+                    {empty > 0 ? ` · ${empty} ${c.emptySections}` : ""}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setEditing(i.slug)}
+                  className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-sm hover:border-[var(--accent)]"
+                >
+                  {c.edit}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+      {!editing && tab === "settings" && (
+        <div className="illuminated space-y-5 px-5 py-6">
+          <label className="block">
+            <span className="mb-1 block text-sm">{c.hijri}</span>
+            <input
+              type="number"
+              min={-2}
+              max={2}
+              value={settings?.hijri_adjustment_days ?? 0}
+              onChange={(e) => saveSettings({ hijri_adjustment_days: Number(e.target.value) })}
+              className="w-28 rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+            />
+            <span className="mt-1 block text-xs text-[var(--ink-soft)]">{c.hijriHint}</span>
+          </label>
+
+          {(
+            [
+              ["featured_dua_slug", c.featuredDua, "dua"],
+              ["featured_ziyara_slug", c.featuredZiyara, "ziyara"],
+            ] as const
+          ).map(([field, label, type]) => (
+            <label key={field} className="block">
+              <span className="mb-1 block text-sm">{label}</span>
+              <select
+                value={settings?.[field] ?? ""}
+                onChange={(e) => saveSettings({ [field]: e.target.value || null } as Partial<SiteSettingsRow>)}
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+              >
+                <option value="">{c.auto}</option>
+                {items
+                  .filter((i) => i.type === type)
+                  .map((i) => (
+                    <option key={i.slug} value={i.slug}>
+                      {locale === "ar" ? i.title_ar : i.title_en}
+                    </option>
+                  ))}
+              </select>
+            </label>
+          ))}
+        </div>
+      )}
+
+      {editing && current && (
+        <div>
+          <button
+            onClick={() => setEditing(null)}
+            className="mb-4 text-sm text-[var(--ink-soft)] hover:text-[var(--primary)]"
+          >
+            {locale === "ar" ? "→" : "←"} {c.back}
+          </button>
+          <h2 className="mb-4 text-xl font-bold">{locale === "ar" ? current.title_ar : current.title_en}</h2>
+
+          <SectionEditor
+            blocks={current.body}
+            locale={locale}
+            onChange={(next) => setRows((r) => ({ ...r, [current.slug]: { slug: current.slug, body: next, published: current.published } }))}
+          />
+
+          <button
+            onClick={() =>
+              setRows((r) => ({
+                ...r,
+                [current.slug]: {
+                  slug: current.slug,
+                  published: current.published,
+                  body: [
+                    ...current.body,
+                    { kind: "text", heading_ar: c.newSection, heading_en: c.newSection, text_ar: "", text_en: "", awaitingText: true },
+                  ],
+                },
+              }))
+            }
+            className="mt-5 w-full rounded-lg border border-dashed border-[var(--border)] px-4 py-3 text-sm text-[var(--ink-soft)] hover:border-[var(--accent)]"
+          >
+            + {c.addSection}
+          </button>
+
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3">
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={current.published}
+                onChange={(e) =>
+                  setRows((r) => ({ ...r, [current.slug]: { slug: current.slug, body: current.body, published: e.target.checked } }))
+                }
+              />
+              <span>
+                {c.publish}
+                <span className="block text-xs text-[var(--ink-soft)]">{c.publishHint}</span>
+              </span>
+            </label>
+            <button
+              onClick={() => saveItem(current.slug, current.body, current.published)}
+              disabled={status === "saving"}
+              className="rounded-lg bg-[var(--primary)] px-5 py-2 text-sm font-medium text-white disabled:opacity-60"
+            >
+              {status === "saving" ? c.saving : c.save}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

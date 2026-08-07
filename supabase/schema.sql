@@ -73,7 +73,30 @@ create policy content_admin_write on public.content_items
 create policy admins_self_read on public.admins
   for select using (public.is_admin());
 
+-- Table privileges.
+--
+-- These are required and easy to miss. Because "automatically expose new
+-- tables" is off, Supabase issues no GRANTs, so Postgres denies at the
+-- privilege level before RLS is ever consulted. Without these the API returns
+-- "permission denied for table ..." to everyone, including the signed-in admin,
+-- and the dashboard cannot read or write anything.
+--
+-- GRANT is the coarse gate, RLS is the fine one. Granting select to anon does
+-- not expose unpublished rows, because content_public_read still filters them.
+grant select on public.site_settings to anon, authenticated;
+grant insert, update on public.site_settings to authenticated;
+grant select on public.content_items to anon, authenticated;
+grant insert, update, delete on public.content_items to authenticated;
+grant select on public.admins to authenticated;
+
 insert into public.admins (email) values ('engineera209@gmail.com')
   on conflict (email) do nothing;
 insert into public.site_settings (id) values (1)
   on conflict (id) do nothing;
+
+-- Verified from an anonymous browser client after applying the above:
+--   site_settings          readable (1 row)
+--   content_items          0 rows, unpublished content stays hidden
+--   insert into content    401
+--   update site_settings   401
+--   admins                 permission denied
