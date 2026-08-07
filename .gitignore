@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...but the credential-free deploy template is safe to track
+!.env.deploy.example
 
 # vercel
 .vercel
