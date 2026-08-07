@@ -1,39 +1,89 @@
 @import "tailwindcss";
 
+/* Self-hosted so the site works offline as a PWA and loads no third-party
+   fonts. Both faces are SIL OFL; licenses ship in public/fonts/. */
+@font-face {
+  font-family: "Amiri";
+  src: url("/fonts/Amiri-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Amiri";
+  src: url("/fonts/Amiri-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Tajawal";
+  src: url("/fonts/Tajawal-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Tajawal";
+  src: url("/fonts/Tajawal-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Tajawal";
+  src: url("/fonts/Tajawal-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --bg: #faf6ee;
-  --bg-elevated: #ffffff;
-  --ink: #23231f;
+  --bg: #f7f1e4;
+  --bg-elevated: #fffdf8;
+  --ink: #1d1c17;
   --ink-soft: #5c584e;
-  --primary: #1f5f52;
-  --primary-dark: #143f37;
-  --accent: #b08a3e;
-  --accent-soft: #e9dcc0;
-  --border: #e7ded0;
-  --card: #ffffff;
-  --ring: #1f5f52;
+  --primary: #14584a;
+  --primary-dark: #0c3a30;
+  --accent: #a67c2e;
+  --accent-bright: #c69a44;
+  --accent-soft: #eadfc4;
+  --border: #e3d7c0;
+  --card: #fffdf8;
+  --ring: #14584a;
+  --page: #fdfaf2;
+  --page-edge: #e8dcc4;
+  --glow: rgba(166, 124, 46, 0.16);
 }
 
 .dark {
-  --bg: #14171a;
-  --bg-elevated: #1b1f22;
-  --ink: #eee9dd;
-  --ink-soft: #b7b0a0;
-  --primary: #5fb3a1;
-  --primary-dark: #3f8577;
-  --accent: #d7b463;
-  --accent-soft: #2a2620;
-  --border: #2b302f;
-  --card: #1b1f22;
-  --ring: #5fb3a1;
+  --bg: #0f1214;
+  --bg-elevated: #171b1e;
+  --ink: #ece6d8;
+  --ink-soft: #a9a292;
+  --primary: #4fb39d;
+  --primary-dark: #2f7a69;
+  --accent: #d4ac5e;
+  --accent-bright: #e6c47c;
+  --accent-soft: #2b2519;
+  --border: #262c2b;
+  --card: #171b1e;
+  --ring: #4fb39d;
+  --page: #171b1e;
+  --page-edge: #0b0e10;
+  --glow: rgba(212, 172, 94, 0.12);
 }
 
-/* "reading" mode = sepia-tinted, extra-calm variant layered on top of light/dark */
+/* Reading mode: warm parchment, layered over light or dark */
 .reading {
-  --bg: #f4ecd8;
-  --bg-elevated: #f9f2e2;
-  --ink: #2c2416;
-  --card: #f9f2e2;
+  --bg: #f0e6cd;
+  --bg-elevated: #f7efdc;
+  --ink: #2a2114;
+  --ink-soft: #5f5340;
+  --card: #f7efdc;
+  --border: #ddceac;
+  --page: #f9f2e1;
+  --page-edge: #d8c7a2;
 }
 
 @theme inline {
@@ -44,10 +94,12 @@
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
   --color-accent: var(--accent);
+  --color-accent-bright: var(--accent-bright);
   --color-accent-soft: var(--accent-soft);
   --color-border: var(--border);
   --color-card: var(--card);
-  --font-arabic: "SF Arabic", "Segoe UI", "Geeza Pro", "Noto Kufi Arabic", "Dubai", Tahoma, Arial, sans-serif;
+  --font-arabic: "Tajawal", "SF Arabic", "Segoe UI", "Geeza Pro", Tahoma, Arial, sans-serif;
+  --font-devotional: "Amiri", "SF Arabic", "Geeza Pro", "Noto Naskh Arabic", serif;
   --font-latin: "SF Pro Text", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -72,6 +124,14 @@ html[dir="ltr"] body {
   font-family: var(--font-latin);
 }
 
+/* Devotional Arabic (duas, ziyarat, hadith) is set in Amiri, a classical
+   Naskh face, at a looser line height so the diacritics have room. */
+.devotional {
+  font-family: var(--font-devotional);
+  line-height: 2.4;
+  letter-spacing: 0;
+}
+
 ::selection {
   background: var(--accent-soft);
   color: var(--ink);
@@ -94,14 +154,122 @@ html[dir="ltr"] body {
   scrollbar-width: none;
 }
 
-/* Islamic geometric motif - subtle, decorative only */
+/* Eight-fold star lattice, the standard girih motif. Decorative only, and
+   kept very low contrast so it never competes with the text. */
 .motif-bg {
-  background-image: radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0);
-  background-size: 22px 22px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23a67c2e' stroke-opacity='0.13' stroke-width='1'%3E%3Cpath d='M30 4 38 22 56 30 38 38 30 56 22 38 4 30 22 22Z'/%3E%3Cpath d='M30 12 34.5 25.5 48 30 34.5 34.5 30 48 25.5 34.5 12 30 25.5 25.5Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 60px 60px;
+}
+
+.motif-fade {
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+/* Illuminated frame used around devotional text blocks */
+.illuminated {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--page);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 1px var(--glow) inset;
+}
+.illuminated::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid var(--accent);
+  opacity: 0.28;
+  border-radius: 0.7rem;
+  pointer-events: none;
+}
+
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent), transparent);
+  opacity: 0.55;
+}
+
+/* Book / flipbook -------------------------------------------------------- */
+
+.book-stage {
+  perspective: 2400px;
+}
+
+/* The reader column is capped at max-w-3xl for comfortable prose, but an open
+   two-page spread needs more room. This widens the book past its parent and
+   keeps it centred: margin-inline resolves against the parent width, so
+   calc(50% - half the child width) is the centring offset in both directions. */
+.book-breakout {
+  width: min(1140px, 94vw);
+  margin-inline: calc(50% - min(570px, 47vw));
+}
+
+.book-page {
+  background: var(--page);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.13);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* The gutter shading that makes a spread read as a bound book. Direction is
+   flipped for LTR so the shadow always falls toward the spine. */
+.book-page-inner {
+  background-image: linear-gradient(to left, rgba(0, 0, 0, 0.07), transparent 12%);
+}
+html[dir="ltr"] .book-page-inner {
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.07), transparent 12%);
+}
+
+.page-turn-enter {
+  animation: pageTurnIn 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes pageTurnIn {
+  from {
+    opacity: 0;
+    transform: rotateY(-14deg) translateX(3%);
+  }
+  to {
+    opacity: 1;
+    transform: rotateY(0) translateX(0);
+  }
+}
+html[dir="ltr"] .page-turn-enter {
+  animation-name: pageTurnInLtr;
+}
+@keyframes pageTurnInLtr {
+  from {
+    opacity: 0;
+    transform: rotateY(14deg) translateX(-3%);
+  }
+  to {
+    opacity: 1;
+    transform: rotateY(0) translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .page-turn-enter {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @media print {
-  header, footer, .no-print {
+  header,
+  footer,
+  .no-print {
     display: none !important;
+  }
+  .illuminated::before {
+    display: none;
+  }
+  .book-page {
+    box-shadow: none;
   }
 }

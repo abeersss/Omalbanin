@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { Locale, t } from "@/lib/i18n";
 import { BodyBlock } from "@/content/types";
+import FlipBook from "./FlipBook";
 
 const FONT_STEPS = [0.9, 1, 1.15, 1.3, 1.5];
+type ReadMode = "scroll" | "book";
 
 export default function ContentReader({
   slug,
@@ -16,6 +18,7 @@ export default function ContentReader({
   body: BodyBlock[];
 }) {
   const [step, setStep] = useState(1);
+  const [mode, setMode] = useState<ReadMode>("scroll");
   const [bookmarked, setBookmarked] = useState(false);
   const [favorited, setFavorited] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -27,6 +30,8 @@ export default function ContentReader({
     const savedStep = Number(localStorage.getItem("omalbnin-reader-fontstep") ?? 1);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setStep(Number.isFinite(savedStep) ? savedStep : 1);
+    const savedMode = localStorage.getItem("omalbnin-reader-mode");
+    if (savedMode === "book" || savedMode === "scroll") setMode(savedMode);
     const bm = JSON.parse(localStorage.getItem("omalbnin-bookmarks") || "[]");
     const fav = JSON.parse(localStorage.getItem("omalbnin-favorites") || "[]");
     setBookmarked(bm.includes(slug));
@@ -49,6 +54,11 @@ export default function ContentReader({
     const next = Math.min(FONT_STEPS.length - 1, Math.max(0, step + delta));
     setStep(next);
     localStorage.setItem("omalbnin-reader-fontstep", String(next));
+  }
+
+  function changeMode(next: ReadMode) {
+    setMode(next);
+    localStorage.setItem("omalbnin-reader-mode", next);
   }
 
   function toggle(key: "omalbnin-bookmarks" | "omalbnin-favorites", setter: (v: boolean) => void) {
@@ -82,9 +92,30 @@ export default function ContentReader({
     <div>
       <div className="sticky top-[57px] z-30 -mx-4 mb-6 border-b border-[var(--border)] bg-[var(--bg)]/95 px-4 py-2.5 backdrop-blur no-print">
         <div className="h-0.5 w-full overflow-hidden rounded-full bg-[var(--border)]">
-          <div className="h-full bg-[var(--primary)] transition-all" style={{ width: `${progress}%` }} />
+          <div
+            className="h-full bg-[var(--primary)] transition-all"
+            style={{ width: mode === "scroll" ? `${progress}%` : "0%" }}
+          />
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+          <div className="flex rounded-full border border-[var(--border)] p-0.5" role="group" aria-label={t(locale, "read_mode")}>
+            {(["scroll", "book"] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => changeMode(m)}
+                aria-pressed={mode === m}
+                className={`rounded-full px-3 py-1 text-xs transition-colors ${
+                  mode === m
+                    ? "bg-[var(--primary)] text-white"
+                    : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                }`}
+              >
+                {m === "book" ? "📖 " : "☰ "}
+                {t(locale, m === "book" ? "read_mode_book" : "read_mode_scroll")}
+              </button>
+            ))}
+          </div>
+          <span className="mx-1 h-4 w-px bg-[var(--border)]" />
           <span className="text-[var(--ink-soft)] text-xs">{t(locale, "font_size")}</span>
           <button onClick={() => changeStep(-1)} className="h-8 w-8 rounded-full border border-[var(--border)] hover:bg-[var(--accent-soft)]" aria-label="A-">
             A−
@@ -119,7 +150,13 @@ export default function ContentReader({
         </div>
       </div>
 
-      <article id="reader-article" style={{ fontSize: `${FONT_STEPS[step]}em`, lineHeight: 2 }} className="space-y-8">
+      {mode === "book" && <FlipBook locale={locale} body={body} fontScale={FONT_STEPS[step]} />}
+
+      <article
+        id="reader-article"
+        style={{ fontSize: `${FONT_STEPS[step]}em` }}
+        className={`devotional space-y-8 ${mode === "book" ? "hidden print:block" : ""}`}
+      >
         {body.map((block, i) => (
           <div key={i}>
             {(block.heading_ar || block.heading_en) && (
