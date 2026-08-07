@@ -2,7 +2,7 @@ import { ContentItem } from "./types";
 
 /**
  * Content migrated from the live omalbnin.com WordPress site (crawled 2026-08-07).
- * Text items are reproduced VERBATIM from the source page — nothing here has been
+ * Text items are reproduced VERBATIM from the source page - nothing here has been
  * paraphrased or "corrected". Where the legacy site only ever stored a religious
  * text as an image (Ziyarat Ashura, the Hussain poem), we keep the original image
  * rather than re-typing it from memory. See audit/AUDIT_NOTES.md and
@@ -24,7 +24,7 @@ export const legacyContent: ContentItem[] = [
         text_ar:
           "عَن جابر بن عبد الله الأنصاري: سَمِعتُ فاطِمَةَ (عليها السلام) أنَّها قالَت: دَخَلَ عَلَيَّ أبِي رَسُولُ اللهِ فِي بَعضِ الأيام، فَقَالَ: السَّلامُ عَلَيكِ يا فاطِمَةُ، فَقُلتُ: عَلَيكَ السَّلامُ، قالَ: إنِّي أجِدُ فِي بَدَنِي ضَعفاً، فَقُلتُ لَهُ: أُعِيذُكَ بِالله يا أبَتاهُ مِنَ الضَّعفِ، فَقالَ: يا فاطِمَةُ، ائتِينِي بِالكِساء اليَمانِي فَغَطِّينِي بِهِ، فَأتَيتُهُ بِالكِساءِ اليَمانِي فَغَطَّيتُهُ بِهِ وَصِرتُ أنظُرُ إلَيهِ وَإذا وَجهُهُ يَتَلألأُ كَأنَّهُ البَدرُ فِي لَيلَةِ تَمامِهِ وَكَمالِهِ.\n\nفَما كانَت إلاّ ساعَةً وَإذا بِوَلَدِيَ الحَسَنِ قَد أقبَلَ وَقالَ: السَّلامُ عَلَيكِ يا أُمَّاهُ فَقُلتُ: وَعَلَيكَ السَّلامُ يا قُرَّةَ عَينِي وَثَمَرَةَ فُؤادِي، فَقالَ: يا أُمَّاهُ إنِّي أشُمُّ عِندَكِ رائِحَةً طيِّبَةً كَأنَّها رائِحَةُ جَدِّي رَسُولِ اللهُ صَلّى الله عَلَيهِ وَآلِهِ، فَقُلتُ: نَعَم، إنَّ جَدَّكَ تَحتَ الكِساءِ، فَأقبَلَ الحَسَنُ نَحوَ الكِساءِ وَقالَ: السَّلامُ عَلَيكَ يا جَدَّاهُ يا رَسُولَ اللهِ، أتَأذَنُ لِي أن أدخُلَ مَعَكَ تَحتَ الكِساءِ، فَقالَ: وَعَلَيكَ السَّلامُ يا وَلَدِي وَيا صاحِبَ حَوضِي، قَد أذِنتُ لَكَ، فَدَخَلَ مَعَهُ تَحتَ الكِساءِ.\n\nفَما كانَت إلاّ ساعَةً وَإذا بِوَلَدِيَ الحُسَينِ قَد أقبَلَ وَقالَ: السَّلامُ عَلَيكِ يا اُمَّاهُ، فَقُلتُ: وَعَلَيكَ السَّلامُ يا قُرَّةَ عَينِي وَثَمَرَةَ فُؤادِي، فَقالَ لِي: يا اُمَّاهُ إنِّي أشُمُّ عِندَكِ رائِحَةً طيِّبَةً كَأنَّها رائِحَةُ جَدِّي رَسُولِ اللهِ، فَقُلتُ: نَعَم، إنَّ جَدَّكَ وَأخاكَ تَحتَ الكِساءِ، فَدَنا الحُسَينُ نَحوَ الكِساءِ وَقالَ: السَّلامُ عَلَيكَ يا جَدّاهُ، السَّلامُ عَلَيكَ يا مَن اختارَهُ الله أتَأذَنُ لِي أن أكُونَ مَعَكُما تَحتَ الكِساءِ، فَقالَ: وعَلَيكَ السَّلامُ يا وَلَدِي وَيا شافِعَ أُمَّتِي، قَد أذِنتُ لَكَ، فَدَخَلَ مَعَهُما تَحتَ الكِساءِ.\n\nفَأقبَلَ عِندَ ذلِكَ أبُو الحَسَنِ عَلِيُّ بنِ أبِي طالِبٍ وَقالَ: السَّلامُ عَلَيكِ يا بِنتَ رَسُولِ اللهِ، فَقُلتُ: وَعَلَيكَ السَّلامُ يا أبا الحَسَنِ وَيا أمِيرَ المُؤمِنِينَ فَقالَ: يا فاطِمَةُ إنِّي أشُمُّ عِندَكِ رائِحَةً طَيِّبَةً كَأنَّها رائِحَةُ أخِي وَابنِ عَمِّي رَسُولِ اللهِ، فَقُلتُ: نَعَم، ها هُوَ مَعَ وَلَدَيكَ تَحتَ الكِساءِ، فَأقبَلَ عَلِيٌّ نَحوَ الكِساءِ وَقالَ: السَّلامُ عَلَيكَ يا رَسُولَ اللهِ أتَأذَنُ لِي أن أكُونَ مَعَكُم تَحتَ الكِساءِ، قالَ: وعَلَيكَ السَّلامُ يا أخِي وَوَصِيِّي وَخَلِيفَتِي وَصاحِبَ لِوائِي قَد أذِنتُ لَكَ فَدَخَلَ عَلِيٌّ تَحتَ الكِساءِ.\n\nثُمَّ أتَيتُ نَحوَ الكِساءِ وَقُلتُ: السَّلامُ عَلَيكَ يا أبَتاُه يا رَسُولَ الله أتَأذَنُ لِي أن أكُونَ مَعَكُم تَحتَ الكِساءِ، قالَ: وَعَلَيكِ السَّلامُ يا بِنتِي وَيا بِضعَتِي قَد أذِنتُ لَكِ فَدَخَلَتُ تَحتَ الكِساءِ، فَلَمّا اكتَمَلنا جَمِيعاً تَحتَ الكِساءِ أخَذَ أبِي رَسُولَ اللهِ بِطَرَفَي الكِساءِ وَأومَأ بِيَدِهِ اليُمنى إلى السَّماءِ وَقالَ: اللهُمَّ إنَّ هؤُلاءِ أهلُ بَيتِي وَخاصَّتِي وَحامَّتِي لَحمُهُم لَحمِي وَدَمُهُم دَمِي يُؤلِمُنِي ما يُؤلِمُهُم وَيَحزُنُنِي ما يَحزُنُهُم، أنا حَربٌ لِمَن حارَبَهُم وَسِلمٌ لِمَن سالَمَهُم وَعَدُوُّ لِمَن عاداهُم وَمُحِبٌّ لِمَن أحَبَّهُم، إنَّهُم مِنِّي وَأنا مِنهُم فَاجعَل صَلَواتِكَ وَبَرَكاتِكَ وَرَحمَتَكَ وَغُفرانَكَ وَرِضوانَكَ عَلَيَّ وَعَلَيهِم، وَأذهِب عَنهُم الرِّجسَ وَطَهِّرهُم تَطهِيراً.\n\nفَقالَ الله عَزَّ وَجَلَّ: يا مَلائِكَتِي وَيا سُكَّانَ سَماواتِي، إنِّي ما خَلَقتُ سَماءً مَبنِيَّةً وَلا أرضاً مَدحِيَّةً وَلا قَمَراً مُنِيراً وَلا شَمساً مُضِيئَةً وَلا فَلَكاً يَدُورُ وَلا بَحراً يَجرِي وَلا فُلكاً يَسرِي إلاّ فِي مَحَبَّةِ هؤُلاءِ الخَمسَةِ الَّذِينَ هُم تَحتَ الكِساءِ. فَقالَ الأمِينُ جبرائِيلَ: يا رَبِّ وَمَن تَحتَ الكِساءِ، فَقالَ عَزَّ وَجَلَّ: هُم أهلُ بَيتِ النُّبُوَّةِ وَمَعدِنُ الرِّسالَةِ، هُم فاطِمَةُ وَأبُوها وَبَعلُها وَبَنُوها. فَقالَ جَبرائِيلُ: يا رَبِّ أتَأذَنُ لِي أن أهبِطَ إلى الأرضِ لأَكُوَنَ مَعَهُم سادِساً، فَقالَ اللهُ: نَعَم، قَد أذِنتُ لَكَ،\n\nفَهَبَطَ الأمِينُ جَبرائِيلَ وَقالَ: السَّلامُ عَلَيكَ يا رَسُولَ اللهِ، العَلِيُّ الأعلى يُقرِئِكَ السَّلامَ وَيَخُصُّكَ بِالتَّحِيَّةِ وَالإكرامِ وَيَقُولَ لَكَ: وَعِزَّتِي وَجَلالِي إنِّي ما خَلَقتُ سَّماءً مَبنِيَّةً وَلا أرضاً مَدحِيَّةً وَلا قَمَراً مُنِيراً وَلا شَمساً مُضِيئَةً وَلا فَلَكاً يَدُورُ وَلا بَحراً يَجرِي وَلا فُلكاً يَسرِي إلاّ لأجلِكُم وَمَحَبَّتِكُم. وَقَد أذِنَ لِي أن أدخُلَ مَعَكُم فَهَل تَأذَنُ لِي يا رَسُولَ اللهِ، فَقالَ رَسُولُ اللهِ: عَلَيكَ السَّلامُ يا أمِينَ وَحيِ اللهِ، إنَّهُ نَعَم قَد أذِنتُ لَكَ فَدَخَلَ جَبرائِيلَ مَعَنا تَحتَ الكِساءِ.\n\nفَقالَ لأبِي: إنَّ اللهَ قَد أوحى إلَيكُم يَقُولُ: إنَّما يُرِيدُ اللهُ لِيُذهِبَ عَنكُم الرِّجسَ أهلَ البَيتِ وَيُطَهِّرَكُم تَطهِيراً، فَقالَ عَلِيٌّ لأبِي: يا رَسُولَ اللهِ، أخبِرنِي ما لِجُلُوسِنا هذا تَحتَ الكِساءِ مِنَ الفَضلِ عِندَ اللهِ، فَقَالَ النَّبِيُّ (صلّى الله عليه و آله): وَالَّذِي بَعَثَنِي بِالحَقِّ نبياً وَاصطَفانِي بِالرِّسالَةِ نَجياً ما ذُكِرَ خَبَرُنا هذا فِي مَحفَلٍ مِن مَحافِلِ أهلِ الأرضِ وَفِيهِ جَمعٌ مِن شِيعَتِنا وَمُحِبِّينا، إلاّ وَنَزَلَت عَلَيهِمُ الرَّحمَةُ وَحَفَّت بِهِمُ المَلائِكَةُ وَاستَغفَرَت لَهُم إلى أن يَتَفَرَّقُوا،\n\nفَقالَ عَلِيُّ (عليه السلام): إذاً وَاللهِ فُزنا وَفازَ شِيعَتُنا وَرَبِّ الكَعبَةِ، فَقالَ أبِي رَسُولُ اللهِ (صلّى الله عليه و آله): يا عَلِيٌّ وَالَّذِي بَعَثَنِي بِالحَقِّ نبياً وَاصطَفانِي بِالرِّسالَةِ نَجياً ما ذُكِرَ خَبَرُنا هذا فِي مَحفَلٍ مِن مَحافِلِ أهلِ الأرضِ وَفِيهِ جَمعٌ مِن شِيعَتِنا وَمُحِبِّينا، وَفِيهِم مَهمُومٌ إلاّ وَفَرَّجَ اللهُ هَمَّهُ وَلا مَغمُومٌ إلاّ وَكَشَفَ اللهُ غَمَّهُ وَلا طالِبُ حاجَةٍ إلاّ وَقَضى اللهُ حاجَتَهُ، فَقالَ عَلِيُّ (عليه السلام): إذاً وَاللهِ فُزنا وَسُعِدنا وَكَذلِكَ شِيعَتُنا فازُوا وَسُعِدُوا فِي الدُّنيا وَالآخِرةِ وَرَبِّ الكَعبَةِ.",
         text_en:
-          "An authoritative English rendering has not yet been migrated into this project — see RELIGIOUS_CONTENT_REVIEW.md. Please read the Arabic text above, or consult a printed Mafatih al-Jinan edition for a verified translation.",
+          "An authoritative English rendering has not yet been migrated into this project - see RELIGIOUS_CONTENT_REVIEW.md. Please read the Arabic text above, or consult a printed Mafatih al-Jinan edition for a verified translation.",
       },
       {
         kind: "embed",
@@ -39,7 +39,7 @@ export const legacyContent: ContentItem[] = [
         embedLabel_en: "Related video (carried over from the original site)",
       },
     ],
-    source: { name_ar: "الموقع الأصلي — omalbnin.com", name_en: "Original site — omalbnin.com", reference: "رواية جابر بن عبد الله الأنصاري عن السيدة فاطمة الزهراء" },
+    source: { name_ar: "الموقع الأصلي - omalbnin.com", name_en: "Original site - omalbnin.com", reference: "رواية جابر بن عبد الله الأنصاري عن السيدة فاطمة الزهراء" },
     verification_status: "site_original_media",
     reading_time_minutes: 6,
     featured: true,
@@ -71,7 +71,7 @@ export const legacyContent: ContentItem[] = [
           "اللَّهُمَّ أَنْتَ الْأَوَّلُ بِلَا أَوَّلِيَّةٍ مَعْدُودَةٍ وَ الْآخِرُ بِلَا آخِرِيَّةٍ مَحْدُودَةٍ، أَنْشَأْتَنَا لَا لِعِلَّةٍ اقْتِسَاراً وَ اخْتَرَعْتَنَا لَا لِحَاجَةٍ اقْتِدَاراً وَ ابْتَدَعْتَنَا بِحِكْمَتِكَ اخْتِيَاراً وَ بَلَوْتَنَا بِأَمْرِكَ وَ نَهْيِكَ اخْتِبَاراً وَ أَيَّدْتَنَا بِالْآلَاتِ وَ مَنَحْتَنَا بِالْأَدَوَاتِ وَ كَلَّفْتَنَا الطَّاقَةَ وَ جَشَّمْتَنَا الطَّاعَةَ فَأَمَرْتَ تَخْيِيراً وَ نَهَيْتَ تَحْذِيراً وَ خَوَّلْتَ كَثِيراً وَ سَأَلْتَ يَسِيراً فَعُصِيَ أَمْرُكَ فَحَلُمْتَ وَ جُهِلَ قَدْرُكَ فَتَكَرَّمْتَ، فَأَنْتَ رَبُّ الْعِزَّةِ وَ الْبَهَاءِ وَ الْعَظَمَةِ وَ الْكِبْرِيَاءِ وَ الْإِحْسَانِ وَ النَّعْمَاءِ وَ الْمَنِّ وَ الْآلَاءِ وَ الْمِنَحِ وَ الْعَطَاءِ وَ الْإِنْجَازِ وَ الْوَفَاءِ، وَ لَا تُحِيطُ الْقُلُوبُ لَكَ بِكُنْهٍ وَ لَا تُدْرِكُ الْأَوْهَامُ لَكَ صِفَةً وَ لَا يُشْبِهُكَ شَيْ‏ءٌ مِنْ خَلْقِكَ وَ لَا يُمَثَّلُ بِكَ شَيْ‏ءٌ مِنْ صَنْعَتِكَ، تَبَارَكْتَ أَنْ تُحَسَّ أَوْ تُمَسَّ أَوْ تُدْرِكَكَ الْحَوَاسّ الْخَمْسُ وَ أَنَّى يُدْرِكُ مَخْلُوقٌ خَالِقَهُ وَ تَعَالَيْتَ يَا إِلَهِي عَمَّا يَقُولُ الظَّالِمُونَ عُلُوّاً كَبِيراً. اللَّهُمَّ أَدِلْ لِأَوْلِيَائِكَ مِنْ أَعْدَائِكَ الظَّالِمِينَ الْبَاغِينَ النَّاكِثِينَ الْقَاسِطِينَ الْمَارِقِينَ الَّذِينَ أَضَلُّوا عِبَادَكَ وَ حَرَّفُوا كِتَابَكَ وَ بَدَّلُوا أَحْكَامَكَ. اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَ آلِ مُحَمَّدٍ وَ قَوِّ ضَعْفَ الْمُخْلِصِينَ لَكَ بِالْمَحَبَّةِ الْمُشَايِعِينَ لَنَا بِالْمُوَالاةِ الْمُتَّبِعِينَ لَنَا بِالتَّصْدِيقِ وَ الْعَمَلِ، وَ اغْفِرِ اللَّهُمَّ ذُنُوبَهُمْ وَ خَطَايَاهُمْ وَ لَا تُزِغْ قُلُوبَهُمْ بَعْدَ إِذْ هَدَيْتَهُمْ، إِنَّكَ سَمِيعٌ مُجِيبٌ وَ صَلَّى اللَّهُ عَلَى مُحَمَّدٍ وَ آلِهِ الطَّيِّبِينَ الطَّاهِرِينَ.",
       },
     ],
-    source: { name_ar: "الموقع الأصلي — omalbnin.com", name_en: "Original site — omalbnin.com" },
+    source: { name_ar: "الموقع الأصلي - omalbnin.com", name_en: "Original site - omalbnin.com" },
     verification_status: "site_original_media",
     related_person: ["imam-al-jawad"],
     reading_time_minutes: 4,
@@ -85,7 +85,7 @@ export const legacyContent: ContentItem[] = [
     category: ["safra", "sayyida-nafisa"],
     title_ar: "سفرة السيدة نفيسة عليها السلام",
     title_en: "The Table (Sofra) of Sayyida Nafisa",
-    summary_ar: "سيرة السيدة نفيسة، ومديح، وأدعية وزيارة منسوبة إلى ممارسة شعبية متداولة حول سفرتها.",
+    summary_ar: "سيرة السيدة نفيسة، ومديح، وأدعية وزيارة منقولة حول سفرتها.",
     summary_en: "Biography of Sayyida Nafisa together with devotional poetry, supplications, and a visitation text associated with the popular 'sofra' practice.",
     body: [
       {
@@ -118,8 +118,8 @@ export const legacyContent: ContentItem[] = [
       },
     ],
     source: {
-      name_ar: "ممارسة شعبية متداولة — الموقع الأصلي omalbnin.com",
-      name_en: "Popular devotional tradition — original site omalbnin.com",
+      name_ar: "حسب المنقول - الموقع الأصلي omalbnin.com",
+      name_en: "As transmitted - original site omalbnin.com",
     },
     verification_status: "traditional_practice",
     reading_time_minutes: 8,
@@ -173,8 +173,8 @@ export const legacyContent: ContentItem[] = [
       },
     ],
     source: {
-      name_ar: "ممارسة شعبية متداولة — الموقع الأصلي omalbnin.com",
-      name_en: "Popular devotional tradition — original site omalbnin.com",
+      name_ar: "حسب المنقول - الموقع الأصلي omalbnin.com",
+      name_en: "As transmitted - original site omalbnin.com",
     },
     verification_status: "traditional_practice",
     reading_time_minutes: 10,
@@ -189,8 +189,8 @@ export const legacyContent: ContentItem[] = [
     category: ["safra", "al-khidr"],
     title_ar: "سفرة الخضر عليه السلام",
     title_en: "The Table (Sofra) / Gathering (Majlis) of al-Khidr",
-    summary_ar: "تعريف بمجلس الخضر عليه السلام وآدابه وطريقة إعداد سفرته كما وردت في الموقع الأصلي — بعض الفقرات بحاجة لإعادة تدقيق كاملة.",
-    summary_en: "An overview of the Majlis al-Khidr gathering, its etiquette, and how the sofra is prepared, as it appeared on the original site — some sections still need full re-verification.",
+    summary_ar: "تعريف بمجلس الخضر عليه السلام وآدابه وطريقة إعداد سفرته كما وردت في الموقع الأصلي - بعض الفقرات بحاجة لإعادة تدقيق كاملة.",
+    summary_en: "An overview of the Majlis al-Khidr gathering, its etiquette, and how the sofra is prepared, as it appeared on the original site - some sections still need full re-verification.",
     body: [
       {
         kind: "text",
@@ -204,14 +204,14 @@ export const legacyContent: ContentItem[] = [
         heading_ar: "تنبيه على حالة هذا المحتوى",
         heading_en: "Note on this content's status",
         text_ar:
-          "هذه الصفحة على الموقع الأصلي أطول من ذلك بكثير وتتضمن تفاصيل مراسم المجلس، ونص «صلوات الختمة»، ونخوة للخضر، وزيارة الإمام صاحب الزمان، ودعاء التفريج، وتفاصيل تحضير السفرة (الدقيق، الأرز، السكر، الملح، السمسم، ماء الورد...) وشهادة عن استجابة دعاء. تعذّر على أداة الاستخراج في هذه الجلسة استخراج هذه الأقسام كاملة كنص حرفي دون تلخيص، لذلك لم تُنقل هنا تفاديًا لخطر تحريف نص ديني بالخطأ. يجب إعادة زيارة الصفحة الأصلية ونسخ هذه الأقسام حرفيًا قبل النشر النهائي — انظر RELIGIOUS_CONTENT_REVIEW.md.",
+          "هذه الصفحة على الموقع الأصلي أطول من ذلك بكثير وتتضمن تفاصيل مراسم المجلس، ونص «صلوات الختمة»، ونخوة للخضر، وزيارة الإمام صاحب الزمان، ودعاء التفريج، وتفاصيل تحضير السفرة (الدقيق، الأرز، السكر، الملح، السمسم، ماء الورد...) وشهادة عن استجابة دعاء. تعذّر على أداة الاستخراج في هذه الجلسة استخراج هذه الأقسام كاملة كنص حرفي دون تلخيص، لذلك لم تُنقل هنا تفاديًا لخطر تحريف نص ديني بالخطأ. يجب إعادة زيارة الصفحة الأصلية ونسخ هذه الأقسام حرفيًا قبل النشر النهائي - انظر RELIGIOUS_CONTENT_REVIEW.md.",
         text_en:
-          "The original page is considerably longer and includes the full gathering etiquette, the 'closing prayers' litany, an invocation to al-Khidr, a visitation of Imam al-Zaman, a supplication for relief, and detailed sofra preparation instructions (flour, rice, sugar, salt, sesame, rose water...) plus a testimonial account. This session's extraction tool could not pull those sections as guaranteed-verbatim text, so they were intentionally left out here rather than risk mistyping devotional wording. The original page must be revisited and copied verbatim before final publication — see RELIGIOUS_CONTENT_REVIEW.md.",
+          "The original page is considerably longer and includes the full gathering etiquette, the 'closing prayers' litany, an invocation to al-Khidr, a visitation of Imam al-Zaman, a supplication for relief, and detailed sofra preparation instructions (flour, rice, sugar, salt, sesame, rose water...) plus a testimonial account. This session's extraction tool could not pull those sections as guaranteed-verbatim text, so they were intentionally left out here rather than risk mistyping devotional wording. The original page must be revisited and copied verbatim before final publication - see RELIGIOUS_CONTENT_REVIEW.md.",
       },
     ],
     source: {
-      name_ar: "ممارسة شعبية متداولة — الموقع الأصلي omalbnin.com",
-      name_en: "Popular devotional tradition — original site omalbnin.com",
+      name_ar: "حسب المنقول - الموقع الأصلي omalbnin.com",
+      name_en: "As transmitted - original site omalbnin.com",
     },
     verification_status: "needs_verification",
     reading_time_minutes: 3,
@@ -225,8 +225,8 @@ export const legacyContent: ContentItem[] = [
     category: ["karbala", "ziyarat"],
     title_ar: "زيارة عاشوراء",
     title_en: "Ziyarat Ashura",
-    summary_ar: "على الموقع الأصلي، نص الزيارة محفوظ كصور فقط وليس كنص قابل للنسخ — تم الحفاظ على الصور كما هي.",
-    summary_en: "On the original site, the visitation text exists only as images, not selectable text — the images are preserved as-is.",
+    summary_ar: "على الموقع الأصلي، نص الزيارة محفوظ كصور فقط وليس كنص قابل للنسخ - تم الحفاظ على الصور كما هي.",
+    summary_en: "On the original site, the visitation text exists only as images, not selectable text - the images are preserved as-is.",
     body: [
       {
         kind: "text",
@@ -238,14 +238,14 @@ export const legacyContent: ContentItem[] = [
       {
         kind: "image",
         imageUrl: "/images/legacy/ur-6.png",
-        imageAlt_ar: "زيارة عاشوراء — صفحة ١ (من الموقع الأصلي)",
-        imageAlt_en: "Ziyarat Ashura — page 1 (from the original site)",
+        imageAlt_ar: "زيارة عاشوراء - صفحة ١ (من الموقع الأصلي)",
+        imageAlt_en: "Ziyarat Ashura - page 1 (from the original site)",
       },
       {
         kind: "image",
         imageUrl: "/images/legacy/ur-5.png",
-        imageAlt_ar: "زيارة عاشوراء — صفحة ٢ (من الموقع الأصلي)",
-        imageAlt_en: "Ziyarat Ashura — page 2 (from the original site)",
+        imageAlt_ar: "زيارة عاشوراء - صفحة ٢ (من الموقع الأصلي)",
+        imageAlt_en: "Ziyarat Ashura - page 2 (from the original site)",
       },
       {
         kind: "embed",
@@ -254,7 +254,7 @@ export const legacyContent: ContentItem[] = [
         embedLabel_en: "Related booklet from the original site (external source)",
       },
     ],
-    source: { name_ar: "الموقع الأصلي — omalbnin.com", name_en: "Original site — omalbnin.com" },
+    source: { name_ar: "الموقع الأصلي - omalbnin.com", name_en: "Original site - omalbnin.com" },
     verification_status: "site_original_media",
     related_person: ["imam-husayn"],
     weekday: "friday",
@@ -275,7 +275,7 @@ export const legacyContent: ContentItem[] = [
       {
         kind: "text",
         text_ar: "الصفحة الأصلية لهذه الزيارة على الموقع لم تحتوِ على نص، بل على صورة/فيديو للزيارة فقط. يُرجى إضافة نص محقق لاحقًا.",
-        text_en: "The original page for this visitation contained no text — only an image/video. A verified text should be added later.",
+        text_en: "The original page for this visitation contained no text - only an image/video. A verified text should be added later.",
       },
       {
         kind: "image",
@@ -284,7 +284,7 @@ export const legacyContent: ContentItem[] = [
         imageAlt_en: "Ziyarat al-Abbas (from the original site)",
       },
     ],
-    source: { name_ar: "الموقع الأصلي — omalbnin.com", name_en: "Original site — omalbnin.com" },
+    source: { name_ar: "الموقع الأصلي - omalbnin.com", name_en: "Original site - omalbnin.com" },
     verification_status: "site_original_media",
     published: true,
     legacyUrl: "/زيارة-العباس-عليه-السلام/",
@@ -306,7 +306,7 @@ export const legacyContent: ContentItem[] = [
         imageAlt_en: "Poem in love of Imam Husayn (from the original site)",
       },
     ],
-    source: { name_ar: "الموقع الأصلي — omalbnin.com", name_en: "Original site — omalbnin.com" },
+    source: { name_ar: "الموقع الأصلي - omalbnin.com", name_en: "Original site - omalbnin.com" },
     verification_status: "site_original_media",
     related_person: ["imam-husayn"],
     published: true,
@@ -333,7 +333,7 @@ export const legacyContent: ContentItem[] = [
         embedLabel_en: "Embedded booklet from the original site (external source)",
       },
     ],
-    source: { name_ar: "الموقع الأصلي — omalbnin.com", name_en: "Original site — omalbnin.com" },
+    source: { name_ar: "الموقع الأصلي - omalbnin.com", name_en: "Original site - omalbnin.com" },
     verification_status: "needs_verification",
     related_person: ["imam-ali"],
     published: true,
@@ -346,8 +346,8 @@ export const legacyContent: ContentItem[] = [
     category: ["misc"],
     title_ar: "حلال المشاكل",
     title_en: "Halal al-Mashakil (\"Problem Solver\")",
-    summary_ar: "صفحة قصيرة تحمل اسم «عبد الله الحطاب» مع كتيب خارجي مضمّن — الغرض منها غير واضح وتحتاج توضيحًا من مالك الموقع.",
-    summary_en: "A short page titled 'Abdullah Al-Hattab' with an embedded external booklet — its purpose is unclear and needs clarification from the site owner.",
+    summary_ar: "صفحة قصيرة تحمل اسم «عبد الله الحطاب» مع كتيب خارجي مضمّن - الغرض منها غير واضح وتحتاج توضيحًا من مالك الموقع.",
+    summary_en: "A short page titled 'Abdullah Al-Hattab' with an embedded external booklet - its purpose is unclear and needs clarification from the site owner.",
     body: [
       {
         kind: "text",
@@ -360,7 +360,7 @@ export const legacyContent: ContentItem[] = [
         embedLabel_en: "Embedded booklet from the original site (external source)",
       },
     ],
-    source: { name_ar: "الموقع الأصلي — omalbnin.com", name_en: "Original site — omalbnin.com" },
+    source: { name_ar: "الموقع الأصلي - omalbnin.com", name_en: "Original site - omalbnin.com" },
     verification_status: "needs_verification",
     published: true,
     legacyUrl: "/abdullah-alhattab/",

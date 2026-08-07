@@ -52,7 +52,7 @@ export default function Footer({ locale }: { locale: Locale }) {
         ))}
       </div>
       <div className="mx-auto max-w-6xl px-4 text-xs text-[var(--ink-soft)] border-t border-[var(--border)] pt-4">
-        © {year} Omalbnin.com — {t(locale, "all_rights")}
+        © {year} Omalbnin.com - {t(locale, "all_rights")}
       </div>
     </footer>
   );

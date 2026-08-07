@@ -22,7 +22,7 @@ export default function ContentReader({
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    // Post-mount localStorage reads — see Counter.tsx for why these run in an
+    // Post-mount localStorage reads - see Counter.tsx for why these run in an
     // effect instead of a useState lazy initializer.
     const savedStep = Number(localStorage.getItem("omalbnin-reader-fontstep") ?? 1);
     // eslint-disable-next-line react-hooks/set-state-in-effect

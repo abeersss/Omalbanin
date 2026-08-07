@@ -15,8 +15,8 @@ export async function generateMetadata(props: LayoutProps<"/[locale]">): Promise
   const { locale } = await props.params;
   const isAr = locale === "ar";
   const title = isAr
-    ? "أم البنين | Omalbnin — رفيقك الروحي اليومي"
-    : "Omalbnin | أم البنين — Your Daily Spiritual Companion";
+    ? "أم البنين | Omalbnin - كتاب الأدعية والزيارات اليومية"
+    : "Omalbnin | أم البنين - Your Daily Spiritual Companion";
   const description = isAr
     ? "لوحة يومية للأدعية والزيارات والمعصومين الأربعة عشر ومفاتيح الجنان، بالعربية والإنجليزية."
     : "A daily dashboard for duas, ziyarat, the Fourteen Ma'sumeen, and Mafatih al-Jinan, in Arabic and English.";

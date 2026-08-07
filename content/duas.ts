@@ -1,13 +1,13 @@
 import { ContentItem } from "./types";
 
 /**
- * Dua Library. Two entries below carry real migrated text (see legacy.ts —
+ * Dua Library. Two entries below carry real migrated text (see legacy.ts -
  * Dua al-Faraj and the Imam al-Jawad qunuts are duplicated here under the
  * library's category system so they're browsable from /duas as well as from
  * their legacy collection page). Everything else in the "vision" library that
  * we do NOT yet have verified sourced text for is listed with published:false
  * and verification_status "needs_verification" so the architecture exists
- * without fabricating sacred wording — see RELIGIOUS_CONTENT_REVIEW.md.
+ * without fabricating sacred wording - see RELIGIOUS_CONTENT_REVIEW.md.
  */
 export const duas: ContentItem[] = [
   {
@@ -26,7 +26,7 @@ export const duas: ContentItem[] = [
           "يا عِمادَ مَنْ لا عِمادَ لَهُ وَ يا ذُخْرَ مَنْ لا ذُخْرَ لَهُ وَيا سَنَدَ مَنْ لا سَنَدَ لَهُ وَيا حِرْزَ مَنْ لا حِرْزَ لَهُ وَيا غِياثَ مَنْ لا غِياثَ لَهُ وَيَا كَنْزَ مَنْ لا كَنْزَ لَهُ وَيَا عِزَّ مَنْ لا عِزَّ لَهُ، يَا كَريمَ الْعَفْوِ وَيا حَسَنَ التَّجاوز، يَا عَوْنَ الْضُعَفَاء يَا كَنْزَ الْفُقَرَاء يَا عَظِيمَ الْرَجَاء، يَا مُنْقِذَ الْغَرْقَى يَا مُنْجِيَ الْهَلْكَى، يَا مُحْسِنُ يَا مُجْمِلُ يَا مُنْعِمُ يَا مُفْضِلُ، أَنْتَ الَّذي سَجَدَ لَكَ سَوَادُ الْلَّيلِ وَنُوْرُ الْنَّهار وَضُوءُ الْقَمر وَشُعَاعُ الْشَّمس وَحَفيفُ الْشَّجر وَدَويُّ الماء، يَا اللهُ يَا اللهُ يَا اللهُ، لا إلهَ إلا أَنْتَ وَحْدَكَ لاَ شَرِيكَ لَكَ، يَا رَبَّاهُ يَا اللهُ صَلِّ عَلَى مُحَمَّدٍ وَآَلِ مُحَمَّد وَافْعَل بِنَا مَـا أَنْتَ أَهْلُهُ.",
       },
     ],
-    source: { name_ar: "الموقع الأصلي — omalbnin.com", name_en: "Original site — omalbnin.com" },
+    source: { name_ar: "الموقع الأصلي - omalbnin.com", name_en: "Original site - omalbnin.com" },
     verification_status: "site_original_media",
     reading_time_minutes: 2,
     featured: true,
@@ -48,7 +48,7 @@ export const duas: ContentItem[] = [
       {
         kind: "text",
         text_ar: "أَسْتَغْفِرُ اللهَ رَبِّي وَأَتُوبُ إِلَيْهِ.",
-        text_en: "Astaghfir Allaha Rabbi wa atubu ilayh — I seek God's forgiveness, my Lord, and I turn to Him in repentance.",
+        text_en: "Astaghfir Allaha Rabbi wa atubu ilayh - I seek God's forgiveness, my Lord, and I turn to Him in repentance.",
       },
     ],
     source: {
@@ -75,7 +75,7 @@ export const duas: ContentItem[] = [
       {
         kind: "text",
         text_ar: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَآلِ مُحَمَّدٍ.",
-        text_en: "Allahumma salli 'ala Muhammadin wa Aali Muhammad — O God, send blessings upon Muhammad and the family of Muhammad.",
+        text_en: "Allahumma salli 'ala Muhammadin wa Aali Muhammad - O God, send blessings upon Muhammad and the family of Muhammad.",
       },
     ],
     source: { name_ar: "صيغة متداولة على نطاق واسع بين المسلمين", name_en: "A formula widely recited across the Muslim world" },

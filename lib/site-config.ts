@@ -1,7 +1,7 @@
 /**
  * Site configuration that an administrator needs to change without touching
  * application code. In this first production release (static, no database yet)
- * this file IS the "admin panel" — a maintainer edits the values below and
+ * this file IS the "admin panel" - a maintainer edits the values below and
  * redeploys. See PRODUCTION_REPORT.md for the plan to move this into a real
  * settings table once a CMS/database is connected.
  */

@@ -94,7 +94,7 @@ html[dir="ltr"] body {
   scrollbar-width: none;
 }
 
-/* Islamic geometric motif — subtle, decorative only */
+/* Islamic geometric motif - subtle, decorative only */
 .motif-bg {
   background-image: radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0);
   background-size: 22px 22px;

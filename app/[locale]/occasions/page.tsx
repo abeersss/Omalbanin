@@ -24,8 +24,8 @@ export default async function OccasionsPage(props: PageProps<"/[locale]/occasion
       <h1 className="mb-2 text-3xl font-extrabold text-[var(--primary)]">{t(l, "occasions_title")}</h1>
       <p className="mb-8 text-[var(--ink-soft)]">
         {l === "ar"
-          ? "التواريخ الهجرية أدناه قابلة للتعديل الإداري (± يوم) بحسب رؤية الهلال — راجع lib/site-config.ts."
-          : "Hijri dates below are subject to the administrator's moon-sighting adjustment — see lib/site-config.ts."}
+          ? "التواريخ الهجرية أدناه قابلة للتعديل الإداري (± يوم) بحسب رؤية الهلال - راجع lib/site-config.ts."
+          : "Hijri dates below are subject to the administrator's moon-sighting adjustment - see lib/site-config.ts."}
       </p>
       <ul className="space-y-3">
         {sorted.map((o) => (

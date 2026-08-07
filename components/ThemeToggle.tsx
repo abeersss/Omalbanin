@@ -9,7 +9,7 @@ export default function ThemeToggle({ locale }: { locale: Locale }) {
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    // Post-mount localStorage read — see Counter.tsx for why this can't be a
+    // Post-mount localStorage read - see Counter.tsx for why this can't be a
     // useState lazy initializer (localStorage is unavailable during static export).
     const saved = (localStorage.getItem("omalbnin-theme") as Theme) || "light";
     // eslint-disable-next-line react-hooks/set-state-in-effect

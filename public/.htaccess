@@ -1,4 +1,4 @@
-# Omalbnin.com — legacy WordPress URL → new site 301 redirects
+# Omalbnin.com - legacy WordPress URL → new site 301 redirects
 # Generated from the pre-migration crawl in audit/AUDIT_NOTES.md (2026-08-07).
 #
 # NOTE ON MATCHING: mod_alias (Redirect/RedirectMatch) matches the *decoded*

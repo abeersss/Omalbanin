@@ -3,7 +3,7 @@ import { Masum } from "./types";
 /**
  * Biographical dates below follow the dates most commonly cited in mainstream
  * Shia Ithna Ashari sources. Minor variations exist between scholars/editions.
- * verification_status is deliberately "needs_verification" for every entry —
+ * verification_status is deliberately "needs_verification" for every entry -
  * see RELIGIOUS_CONTENT_REVIEW.md. Teaching notes describe well-known emphases
  * rather than quoting exact wording we cannot cross-check in this project yet.
  */
@@ -27,12 +27,12 @@ export const masumeen: Masum[] = [
     bio_ar:
       "هو محمد بن عبد الله، خاتم الأنبياء والمرسلين، بعثه الله رحمة للعالمين وحامل الرسالة الخاتمة. نشأ يتيمًا في مكة، وعُرف بالصدق والأمانة قبل البعثة، ثم أوحي إليه في غار حراء وهو ابن أربعين عامًا. دعا إلى التوحيد وأسس أمة الإسلام، وهاجر إلى المدينة، ونصّب علي بن أبي طالب عليه السلام وليًا من بعده في غدير خم بحسب ما ترويه المصادر الشيعية.",
     bio_en:
-      "Muhammad ibn Abdullah, the final Messenger of God, was raised an orphan in Mecca and known for his truthfulness before receiving revelation at age forty in the Cave of Hira. He established the message of Islamic monotheism, migrated to Medina, and — as related in Shia sources — designated Ali ibn Abi Talib as his successor at Ghadir Khumm.",
+      "Muhammad ibn Abdullah, the final Messenger of God, was raised an orphan in Mecca and known for his truthfulness before receiving revelation at age forty in the Cave of Hira. He established the message of Islamic monotheism, migrated to Medina, and - as related in Shia sources - designated Ali ibn Abi Talib as his successor at Ghadir Khumm.",
     teachings: [
       {
         text_ar: "التأكيد على وحدة الله ورسالة الأخلاق ورحمته بالعالمين، وربط النجاة بالتمسك بالثقلين: كتاب الله وأهل بيته.",
         text_en:
-          "Emphasis on the oneness of God, universal mercy and ethics, and — per Shia tradition — linking guidance after him to holding fast to 'the two weighty things': the Qur'an and his household.",
+          "Emphasis on the oneness of God, universal mercy and ethics, and - per Shia tradition - linking guidance after him to holding fast to 'the two weighty things': the Qur'an and his household.",
       },
     ],
     related_content: ["hadith-al-kisa", "ziyarat-jamia-kabira"],
@@ -147,18 +147,18 @@ export const masumeen: Masum[] = [
     kunya_en: "Abu Abdillah",
     birth_ar: "٣ شعبان، ٤ هـ (المدينة)",
     birth_en: "3 Sha'ban, 4 AH (Medina)",
-    martyrdom_ar: "١٠ محرم، ٦١ هـ — يوم عاشوراء (كربلاء)",
-    martyrdom_en: "10 Muharram, 61 AH — the Day of Ashura (Karbala)",
+    martyrdom_ar: "١٠ محرم، ٦١ هـ - يوم عاشوراء (كربلاء)",
+    martyrdom_en: "10 Muharram, 61 AH - the Day of Ashura (Karbala)",
     relation_ar: "الابن الثاني للإمام علي وفاطمة الزهراء، الإمام الثالث",
     relation_en: "Second son of Imam Ali and Fatimah; the third Imam",
     bio_ar:
       "رفض مبايعة يزيد بن معاوية وخرج من المدينة إلى مكة ثم نحو الكوفة تلبيةً لدعوة أهلها، فحوصر في كربلاء واستُشهد مع أهل بيته وأصحابه يوم عاشوراء عام 61هـ في واقعة كربلاء التي تمثل محورًا أساسيًا في العقيدة والوجدان الشيعي، وسُبيت نساؤه وأطفاله بعد المعركة.",
     bio_en:
-      "He refused to pledge allegiance to Yazid ibn Mu'awiya, departing Medina for Mecca and then toward Kufa at its people's invitation. Besieged at Karbala, he was martyred with his family and companions on the Day of Ashura, 61 AH — an event central to Shia faith and devotional life — after which the surviving women and children were taken captive.",
+      "He refused to pledge allegiance to Yazid ibn Mu'awiya, departing Medina for Mecca and then toward Kufa at its people's invitation. Besieged at Karbala, he was martyred with his family and companions on the Day of Ashura, 61 AH - an event central to Shia faith and devotional life - after which the surviving women and children were taken captive.",
     teachings: [
       {
         text_ar: "الوقوف في وجه الظلم ولو كلّف كل شيء، وهو المعنى المركزي في زيارة عاشوراء وسائر زيارات كربلاء.",
-        text_en: "Standing against injustice whatever the cost — the central theme of Ziyarat Ashura and the Karbala visitations.",
+        text_en: "Standing against injustice whatever the cost - the central theme of Ziyarat Ashura and the Karbala visitations.",
       },
     ],
     related_content: ["ziyarat-ashura"],
@@ -187,7 +187,7 @@ export const masumeen: Masum[] = [
     bio_ar:
       "نجا من مجزرة كربلاء بسبب مرضه، وسُبي مع النساء إلى الشام ثم عاد إلى المدينة. عُرف بكثرة سجوده وعبادته حتى لُقّب بالسجاد وزين العابدين، وتُروى عنه مجموعة الأدعية المعروفة بالصحيفة السجادية.",
     bio_en:
-      "He survived the Karbala massacre due to illness, was taken captive to Damascus with the women, and later returned to Medina. Known for extensive prostration and worship — hence his titles al-Sajjad and Zayn al-Abidin — he is the source to whom the collection of supplications known as al-Sahifa al-Sajjadiyya is attributed.",
+      "He survived the Karbala massacre due to illness, was taken captive to Damascus with the women, and later returned to Medina. Known for extensive prostration and worship - hence his titles al-Sajjad and Zayn al-Abidin - he is the source to whom the collection of supplications known as al-Sahifa al-Sajjadiyya is attributed.",
     teachings: [
       {
         text_ar: "منهج الدعاء والمناجاة كوسيلة تربوية، كما تجسّد في الصحيفة السجادية.",
@@ -217,7 +217,7 @@ export const masumeen: Masum[] = [
     bio_ar:
       "عاصر فترة ضعف نسبي في قبضة الدولة الأموية، فتفرغ لبثّ العلم وتأسيس حلقات فقهية وحديثية اتسع فيها عدد تلامذته، ولُقّب بالباقر لتعمقه في العلم وشقّه له شقًا.",
     bio_en:
-      "Living through a period of relative weakness in Umayyad control, he devoted himself to teaching and founded circles of jurisprudence and hadith that drew a wide circle of students — earning the title al-Baqir, 'the one who splits knowledge open.'",
+      "Living through a period of relative weakness in Umayyad control, he devoted himself to teaching and founded circles of jurisprudence and hadith that drew a wide circle of students - earning the title al-Baqir, 'the one who splits knowledge open.'",
     teachings: [
       {
         text_ar: "توسيع العمل العلمي والفقهي بين الشيعة، وتأسيس الأرضية لمدرسة الإمام الصادق من بعده.",
@@ -247,7 +247,7 @@ export const masumeen: Masum[] = [
     bio_ar:
       "استفاد من الفراغ السياسي بين سقوط الدولة الأموية وقيام العباسية ليؤسس أوسع مدرسة فقهية وحديثية في تاريخ التشيع، وتخرج على يديه آلاف الرواة، حتى نُسب إليه المذهب الفقهي الجعفري.",
     bio_en:
-      "Taking advantage of the political vacuum between the fall of the Umayyads and the rise of the Abbasids, he built the broadest school of jurisprudence and hadith transmission in Shia history, training thousands of narrators — the Ja'fari school of law is named after him.",
+      "Taking advantage of the political vacuum between the fall of the Umayyads and the rise of the Abbasids, he built the broadest school of jurisprudence and hadith transmission in Shia history, training thousands of narrators - the Ja'fari school of law is named after him.",
     teachings: [
       {
         text_ar: "تدوين الفقه والحديث الشيعي بشكل منهجي واسع.",
@@ -337,11 +337,11 @@ export const masumeen: Masum[] = [
     bio_ar:
       "تولى الإمامة وهو في سن مبكرة (نحو السابعة)، ما جعله موضع اختبار من علماء عصره في مناظرات عامة أثبت فيها علمه، وتُروى عنه قنوتان مأثوران محفوظان على هذا الموقع. توفي في بغداد ودُفن في الكاظمية إلى جانب جده الإمام الكاظم.",
     bio_en:
-      "He assumed the Imamate at a young age (around seven), which made him the subject of public examination by scholars of his time — debates in which his knowledge was affirmed. Two supplications (qunut) attributed to him are preserved on this site. He died in Baghdad and is buried in al-Kazimiyya beside his grandfather Imam al-Kazim.",
+      "He assumed the Imamate at a young age (around seven), which made him the subject of public examination by scholars of his time - debates in which his knowledge was affirmed. Two supplications (qunut) attributed to him are preserved on this site. He died in Baghdad and is buried in al-Kazimiyya beside his grandfather Imam al-Kazim.",
     teachings: [
       {
         text_ar: "قنوتاه المحفوظان يتضمنان الثناء على الله والتوسل بالفرج، وهما من محتوى هذا الموقع الأصلي.",
-        text_en: "His two preserved qunut supplications — praise of God and supplication for relief — are part of this site's original migrated content.",
+        text_en: "His two preserved qunut supplications - praise of God and supplication for relief - are part of this site's original migrated content.",
       },
     ],
     related_content: ["imam-al-jawad-qunut"],
@@ -397,7 +397,7 @@ export const masumeen: Masum[] = [
     bio_ar:
       "عاش معظم حياته تحت إقامة جبرية في سامراء (المعروفة بالعسكر)، ووُلد له ابنه محمد الذي أخفت الشيعة هويته حفاظًا عليه، ويُعتقد أنه الإمام المهدي المنتظر.",
     bio_en:
-      "He spent most of his life under close confinement in Samarra (known as al-'Askar). His son Muhammad — whose identity was concealed by the Shia community for protection — is believed to be the awaited Imam al-Mahdi.",
+      "He spent most of his life under close confinement in Samarra (known as al-'Askar). His son Muhammad - whose identity was concealed by the Shia community for protection - is believed to be the awaited Imam al-Mahdi.",
     teachings: [
       {
         text_ar: "تمهيده السري لبدء غيبة ابنه صونًا له من الخطر السياسي المحدق.",

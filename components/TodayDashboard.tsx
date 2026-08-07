@@ -57,7 +57,7 @@ export default function TodayDashboard({ locale }: { locale: Locale }) {
 
   useEffect(() => {
     // The visitor's real current date must come from the browser, not from
-    // build time (this is a static export) — see Counter.tsx for the pattern.
+    // build time (this is a static export) - see Counter.tsx for the pattern.
     const d = new Date();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setNow(d);
@@ -65,7 +65,7 @@ export default function TodayDashboard({ locale }: { locale: Locale }) {
   }, []);
 
   if (!now || !selected) {
-    // Skeleton shown during static prerender / before hydration — avoids
+    // Skeleton shown during static prerender / before hydration - avoids
     // baking a build-time date into the static HTML.
     return (
       <div className="mx-auto max-w-4xl px-4 py-10 text-center">

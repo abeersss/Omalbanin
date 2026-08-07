@@ -20,8 +20,8 @@ export default async function DuasPage(props: PageProps<"/[locale]/duas">) {
       <h1 className="mb-2 text-3xl font-extrabold text-[var(--primary)]">{t(l, "dua_library")}</h1>
       <p className="mb-8 max-w-2xl text-[var(--ink-soft)]">
         {l === "ar"
-          ? "بعض الأدعية أدناه نصوص حقيقية منقولة من الموقع الأصلي أو مصادر موثوقة، وبعضها لا يزال بانتظار نص محقق — لن نكتب دعاءً من الذاكرة دون تحقق."
-          : "Some duas below carry real migrated or sourced text; others are still awaiting verified text — we won't write a supplication from memory without checking it."}
+          ? "بعض الأدعية أدناه نصوص حقيقية منقولة من الموقع الأصلي أو مصادر موثوقة، وبعضها لا يزال بانتظار نص محقق - لن نكتب دعاءً من الذاكرة دون تحقق."
+          : "Some duas below carry real migrated or sourced text; others are still awaiting verified text - we won't write a supplication from memory without checking it."}
       </p>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {duas.map((d) => (

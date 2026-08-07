@@ -20,7 +20,7 @@ export interface WeekdayProgram {
  * consistently associated with each day across Shia devotional literature
  * (principally Mafatih al-Jinan for Friday) WITHOUT inventing exact wording,
  * counts, or claimed rewards we have not verified. Every practice links to
- * a library entry — many of which are still "coming soon" placeholders
+ * a library entry - many of which are still "coming soon" placeholders
  * (see content/duas.ts, content/ziyarat.ts) rather than fabricated text.
  */
 export const weekdayPrograms: Record<string, WeekdayProgram> = {

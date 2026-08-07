@@ -1,4 +1,4 @@
-# Religious Content Review — items requiring attention before final publish
+# Religious Content Review - items requiring attention before final publish
 
 This file tracks every place this project could not (or should not) assert
 full confidence in a religious text or attribution. Nothing below was
@@ -6,7 +6,7 @@ fabricated; each item is either preserved as original media, labeled a
 popular tradition, or left unpublished pending a verified source.
 
 ## 1. Needs full re-transcription (highest priority)
-- **Sofra al-Khidr** (`/collections/sofra-al-khidr`) — the original page is
+- **Sofra al-Khidr** (`/collections/sofra-al-khidr`) - the original page is
   considerably longer than what could be captured verbatim in this session:
   the full gathering etiquette, "closing prayers" litany, an invocation to
   al-Khidr, a visitation of Imam al-Zaman, a relief supplication, and
@@ -17,7 +17,7 @@ popular tradition, or left unpublished pending a verified source.
   the original page (or the pre-migration WordPress export) and copy these
   sections character-for-character.
 
-## 2. Attribution/wording not yet verified — published as "coming soon"
+## 2. Attribution/wording not yet verified - published as "coming soon"
 These library entries exist in the information architecture (so the site's
 navigation and search are complete) but carry **no body text**, because no
 verified source was available in this session:
@@ -33,19 +33,24 @@ Action: source each from a specific, named, trusted Mafatih al-Jinan edition
 `content/duas.ts` / `content/ziyarat.ts`, change `verification_status` to
 `primary_source`, and set `published: true`.
 
-## 3. Classified as "traditional devotional practice," not a primary source
+## 3. Labeled "حسب المنقول", not a primary source
 - Sofra al-Sayyida Nafisa (full page)
 - Sofra Umm al-Banin (full page, including the "Dua al-Faraj" and tawassul
   method as presented there)
 
 These were on the original site and are **not deleted**, but per the
-project's own sourcing rule they are labeled "ممارسة شعبية متداولة /
-Traditional devotional practice" rather than attributed to Mafatih al-Jinan
-or a named Imam, because that attribution was not present or verifiable on
-the source page itself.
+project's own sourcing rule they are labeled "حسب المنقول / As transmitted"
+rather than attributed to Mafatih al-Jinan or a named Imam, because that
+attribution was not present or verifiable on the source page itself.
+
+Label wording set by the site owner on 2026-08-07: the previous wording was
+"ممارسة شعبية متداولة / Traditional devotional practice"; items whose source
+attribution is unverified are now labeled "حسب المصدر / As per the source"
+instead of "المصدر يحتاج إلى تحقق". The classification behind each label is
+unchanged, only the wording shown to readers.
 
 ## 4. Biographical facts needing scholarly sign-off
-- All 14 Ma'sumeen profiles (`content/masumeen.ts`) — birth/martyrdom dates
+- All 14 Ma'sumeen profiles (`content/masumeen.ts`) - birth/martyrdom dates
   and biographical summaries reflect the dates most commonly cited across
   general Shia sources. Every entry's `verification_status` is deliberately
   set to `needs_verification`. Recommend a single named reference work be
@@ -54,11 +59,11 @@ the source page itself.
 - Occasion dates in `content/occasions.ts` carry the same caveat.
 
 ## 5. Unclear/ambiguous legacy content
-- `/collections/abdullah-alhattab` ("حلال المشاكل") — the original page is
+- `/collections/abdullah-alhattab` ("حلال المشاكل") - the original page is
   just a name and an embedded external flipbook. It's unclear whether this
   refers to a person, a book, or a media series. **Needs the site owner's
   clarification** before it can be classified or captioned properly.
-- `/collections/al-iman-kulluh` — embeds an external AnyFlip flipbook about
+- `/collections/al-iman-kulluh` - embeds an external AnyFlip flipbook about
   Imam Ali whose content was never read/verified in this project.
 
 ## 6. External embeds never verified
@@ -70,5 +75,5 @@ only. Their content is outside this project's control and was not read.
 Hadith al-Kisa and the Imam al-Jawad qunuts currently have Arabic text only;
 no English translation has been added, to avoid producing a translation of
 sacred text without a qualified reviewer. The reader UI is already built to
-show an English translation once one is supplied — see `text_en` fields in
+show an English translation once one is supplied - see `text_en` fields in
 `content/legacy.ts`.

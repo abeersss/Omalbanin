@@ -25,7 +25,7 @@ export default async function UmmAlBaninPage(props: PageProps<"/[locale]/umm-al-
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[var(--ink-soft)]">
           {l === "ar"
             ? "فاطمة بنت حزام الكلابية، المعروفة بأم البنين، زوجة أمير المؤمنين علي عليه السلام بعد وفاة السيدة فاطمة الزهراء عليها السلام، وأم العباس وجعفر وعبد الله وعثمان الذين استُشهدوا جميعًا في كربلاء نصرةً للإمام الحسين عليه السلام. عُرفت بوفائها العميق لأهل البيت، وبقيت هذا الموقع أصلًا مكرَّسًا لتكريمها منذ نشأته."
-            : "Fatimah bint Hizam al-Kilabiyya, known as Umm al-Banin, was the wife of Imam Ali after Lady Fatimah al-Zahra's passing, and mother to al-Abbas, Ja'far, Abdullah and Uthman — all martyred at Karbala in support of Imam Husayn. She is remembered for her profound loyalty to Ahl al-Bayt, and this site began as a dedicated tribute to her."}
+            : "Fatimah bint Hizam al-Kilabiyya, known as Umm al-Banin, was the wife of Imam Ali after Lady Fatimah al-Zahra's passing, and mother to al-Abbas, Ja'far, Abdullah and Uthman - all martyred at Karbala in support of Imam Husayn. She is remembered for her profound loyalty to Ahl al-Bayt, and this site began as a dedicated tribute to her."}
         </p>
       </div>
 

@@ -1,8 +1,8 @@
-/** Verification status — never mark something "verified" without a real source check. */
+/** Verification status - never mark something "verified" without a real source check. */
 export type VerificationStatus =
   | "primary_source" // wording confirmed against a named primary reference (e.g. Mafatih al-Jinan)
   | "traditional_practice" // widely-practiced devotional tradition, not directly sourced to a primary text
-  | "needs_verification" // attribution/wording not yet confirmed — flagged for scholarly review
+  | "needs_verification" // attribution/wording not yet confirmed - flagged for scholarly review
   | "site_original_media"; // preserved as-is from the legacy site (image/video), not re-typed
 
 export type ContentType =

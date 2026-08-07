@@ -20,8 +20,8 @@ export default async function MasumeenPage(props: PageProps<"/[locale]/ahl-al-ba
       <h1 className="mb-2 text-3xl font-extrabold text-[var(--primary)]">{t(l, "the_fourteen")}</h1>
       <p className="mb-8 max-w-2xl text-[var(--ink-soft)]">
         {l === "ar"
-          ? "تواريخ الميلاد والاستشهاد أدناه هي الأكثر تداولًا في المصادر الشيعية العامة، وتحتاج مراجعة علمية نهائية قبل اعتمادها كمرجع دقيق — انظر صفحة المصادر."
-          : "Birth/martyrdom dates below reflect the ones most commonly cited across general Shia sources and still need final scholarly review — see the Sources page."}
+          ? "تواريخ الميلاد والاستشهاد أدناه هي الأكثر تداولًا في المصادر الشيعية العامة، وتحتاج مراجعة علمية نهائية قبل اعتمادها كمرجع دقيق - انظر صفحة المصادر."
+          : "Birth/martyrdom dates below reflect the ones most commonly cited across general Shia sources and still need final scholarly review - see the Sources page."}
       </p>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {masumeen.map((m) => (

@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "أم البنين | Omalbnin",
     short_name: "Omalbnin",
-    description: "رفيقك الروحي اليومي — Your daily spiritual companion",
+    description: "كتاب الأدعية والزيارات اليومية - The Book of Daily Duas and Ziyarat",
     start_url: "/ar/",
     display: "standalone",
     background_color: "#faf6ee",

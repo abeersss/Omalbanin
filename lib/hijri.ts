@@ -43,7 +43,7 @@ export const HIJRI_MONTHS_EN = [
  * Converts a Gregorian date to a Shia-usable Hijri date.
  *
  * IMPORTANT: tabular/astronomical calculation cannot capture local moon-sighting
- * announcements, which is why `siteConfig.hijriAdjustmentDays` exists — an
+ * announcements, which is why `siteConfig.hijriAdjustmentDays` exists - an
  * administrator can shift the displayed date by -2..+2 days (see lib/site-config.ts)
  * without touching this code, to reflect a moon-sighting committee's announcement.
  */

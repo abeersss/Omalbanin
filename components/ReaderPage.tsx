@@ -39,7 +39,7 @@ export default function ReaderPage({
         {item.source && (
           <p className="mt-3 text-sm text-[var(--ink-soft)]">
             <span className="font-semibold">{t(l, "source")}:</span> {l === "ar" ? item.source.name_ar : item.source.name_en}
-            {item.source.reference ? ` — ${item.source.reference}` : ""}
+            {item.source.reference ? ` - ${item.source.reference}` : ""}
           </p>
         )}
       </header>
