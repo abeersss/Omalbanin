@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Locale, t, locales } from "@/lib/i18n";
 import ContentCard from "@/components/ContentCard";
 import { legacyContent } from "@/content/legacy";
+import { getPageContent } from "@/content/pages";
+import LivePageText from "@/components/LivePageText";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -22,11 +24,12 @@ export default async function UmmAlBaninPage(props: PageProps<"/[locale]/umm-al-
     <div className="mx-auto max-w-4xl px-4 py-10">
       <div className="mb-8 rounded-3xl border border-[var(--accent)]/30 bg-[var(--accent-soft)] p-8 text-center">
         <h1 className="text-3xl font-extrabold text-[var(--ink)]">{t(l, "umm_al_banin_title")}</h1>
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[var(--ink-soft)]">
-          {l === "ar"
-            ? "فاطمة بنت حزام الكلابية، المعروفة بأم البنين، زوجة أمير المؤمنين علي عليه السلام بعد وفاة السيدة فاطمة الزهراء عليها السلام، وأم العباس وجعفر وعبد الله وعثمان الذين استُشهدوا جميعًا في كربلاء نصرةً للإمام الحسين عليه السلام. عُرفت بوفائها العميق لأهل البيت، وبقيت هذا الموقع أصلًا مكرَّسًا لتكريمها منذ نشأته."
-            : "Fatimah bint Hizam al-Kilabiyya, known as Umm al-Banin, was the wife of Imam Ali after Lady Fatimah al-Zahra's passing, and mother to al-Abbas, Ja'far, Abdullah and Uthman - all martyred at Karbala in support of Imam Husayn. She is remembered for her profound loyalty to Ahl al-Bayt, and this site began as a dedicated tribute to her."}
-        </p>
+        <LivePageText
+          slug="page-umm-al-banin"
+          locale={l}
+          staticBody={getPageContent("page-umm-al-banin")?.body ?? []}
+          className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[var(--ink-soft)]"
+        />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

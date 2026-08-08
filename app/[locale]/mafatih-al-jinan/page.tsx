@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Locale, t, locales } from "@/lib/i18n";
 import { weekdayPrograms } from "@/content/weekday";
+import { getPageContent } from "@/content/pages";
+import LivePageText from "@/components/LivePageText";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -21,16 +23,12 @@ export default async function MafatihPage(props: PageProps<"/[locale]/mafatih-al
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
       <h1 className="mb-3 text-3xl font-extrabold text-[var(--primary)]">{t(l, "mafatih_title")}</h1>
-      <p className="mb-4 max-w-2xl text-[var(--ink-soft)]">
-        {l === "ar"
-          ? "مفاتيح الجنان مرجع جامع للأدعية والزيارات وأعمال الأيام والشهور. هذا القسم هو الهيكل التنظيمي لهذا المحتوى على الموقع؛ كل عنصر يحمل توثيقًا لمصدره، وما لم نُحقق نصه بعد يظهر بوضوح كذلك بدلًا من اختلاق نص."
-          : "Mafatih al-Jinan is a comprehensive reference for supplications, visitations, and the practices of days and months. This section is this site's organizing structure for that material; every item carries source documentation, and anything not yet verified is clearly marked as such rather than invented."}
-      </p>
-      <div className="mb-10 rounded-2xl border border-[var(--accent)]/30 bg-[var(--accent-soft)] p-4 text-sm">
-        {l === "ar"
-          ? "ملاحظة: النصوص الكاملة المحققة لمعظم أدعية وزيارات مفاتيح الجنان لم تُرفع بعد إلى هذا الموقع في هذه المرحلة. توجد بنية تنظيمية كاملة جاهزة لاستقبالها."
-          : "Note: fully verified text for most Mafatih al-Jinan duas and ziyarat has not been added to this site at this stage. The full organizational structure is ready to receive it."}
-      </div>
+      <LivePageText
+        slug="page-mafatih"
+        locale={l}
+        staticBody={getPageContent("page-mafatih")?.body ?? []}
+        className="mb-10 max-w-2xl text-[var(--ink-soft)]"
+      />
 
       <h2 className="mb-4 text-xl font-bold text-[var(--ink)]">{l === "ar" ? "الأعمال بحسب أيام الأسبوع" : "Practices by Day of the Week"}</h2>
       <div className="space-y-3">

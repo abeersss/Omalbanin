@@ -1,6 +1,7 @@
 import { legacyContent } from "./legacy";
 import { duas } from "./duas";
 import { ziyaratPlaceholders } from "./ziyarat";
+import { pageContent } from "./pages";
 import { ContentItem } from "./types";
 
 export * from "./types";
@@ -10,9 +11,16 @@ export { weekdayPrograms } from "./weekday";
 export { legacyContent, getLegacyBySlug } from "./legacy";
 export { duas, getDuaBySlug } from "./duas";
 export { ziyaratPlaceholders } from "./ziyarat";
+export { pageContent, getPageContent } from "./pages";
 
 /** Every piece of content in the project, published or not - used for search & sitemaps. */
 export const allContent: ContentItem[] = [...legacyContent, ...duas, ...ziyaratPlaceholders];
+
+/** Everything the admin dashboard can edit, including the prose on pages such
+ *  as Mafatih al-Jinan that would otherwise only be changeable in code. Page
+ *  entries are kept out of allContent so they do not appear in search results
+ *  or the sitemap as if they were separate documents. */
+export const editableContent: ContentItem[] = [...allContent, ...pageContent];
 
 export const publishedContent = allContent.filter((c) => c.published);
 

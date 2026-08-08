@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Locale, t, locales } from "@/lib/i18n";
 import { weekdayPrograms } from "@/content/weekday";
+import { getPageContent } from "@/content/pages";
+import LivePageText from "@/components/LivePageText";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -46,9 +48,11 @@ export default async function FridayPage(props: PageProps<"/[locale]/friday">) {
 
       <div className="mt-10 rounded-2xl border border-[var(--border)] p-5 text-sm text-[var(--ink-soft)]">
         <p className="font-semibold text-[var(--ink)] mb-1">{t(l, "source")}</p>
-        {l === "ar"
-          ? "المرجع الأساسي المعتمد لأعمال يوم الجمعة هو مفاتيح الجنان. بعض العناصر أعلاه لا تزال بانتظار رفع نص محقق (انظر شارة كل عنصر)."
-          : "The principal reference for Friday practices is Mafatih al-Jinan. Some items above are still awaiting a verified uploaded text (see each item's badge)."}
+        <LivePageText
+          slug="page-friday"
+          locale={l}
+          staticBody={getPageContent("page-friday")?.body ?? []}
+        />
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { getSupabase, SiteSettingsRow } from "@/lib/supabase";
 import { Locale } from "@/lib/i18n";
-import { allContent, BodyBlock, ContentItem } from "@/content";
+import { editableContent, BodyBlock, ContentItem } from "@/content";
 import SectionEditor from "./SectionEditor";
 
 const copy = {
@@ -128,7 +128,7 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
    *  avoids a separate seeding step, so the dashboard is usable immediately. */
   const items = useMemo(
     () =>
-      allContent.map((item: ContentItem) => {
+      editableContent.map((item: ContentItem) => {
         const row = rows[item.slug];
         return {
           ...item,
