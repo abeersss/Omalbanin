@@ -23,6 +23,11 @@ const copy = {
     save: "حفظ",
     saving: "جارٍ الحفظ...",
     saved: "تم الحفظ",
+    savedLive: "تم الحفظ ونُشر للزوار. افتح الصفحة للتأكد.",
+    savedDraft: "تم الحفظ كمسودة. لن يظهر للزوار حتى تفعّل النشر.",
+    viewPage: "فتح الصفحة",
+    dismiss: "إغلاق",
+    saveFailed: "لم يتم الحفظ. تأكد من اتصالك ثم حاول مرة أخرى.",
     publish: "نشر هذا النص للزوار",
     publishHint: "لا تنشر إلا بعد مراجعة النص كاملاً.",
     addSection: "إضافة قسم جديد",
@@ -52,6 +57,11 @@ const copy = {
     save: "Save",
     saving: "Saving...",
     saved: "Saved",
+    savedLive: "Saved and published. Open the page to confirm.",
+    savedDraft: "Saved as a draft. Visitors will not see it until you publish.",
+    viewPage: "Open the page",
+    dismiss: "Dismiss",
+    saveFailed: "Not saved. Check your connection and try again.",
     publish: "Publish this text to visitors",
     publishHint: "Only publish once the text has been fully reviewed.",
     addSection: "Add a new section",
@@ -85,6 +95,10 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(true);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  /** Sticks around until dismissed. The previous confirmation was a small label
+   *  that cleared itself after under two seconds, which read as "nothing
+   *  happened" and left the owner unsure whether the save had worked. */
+  const [savedNotice, setSavedNotice] = useState<{ slug: string; published: boolean } | null>(null);
 
   // `loading` already starts true, so this does not set it synchronously; the
   // first state update happens after the awaited round trip resolves.
@@ -128,14 +142,10 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
   const current = items.find((i) => i.slug === editing) ?? null;
 
   const stats = useMemo(() => {
-    const emptySections = items.reduce(
-      (n, i) => n + i.body.filter((b) => b.kind === "text" && !b.text_ar?.trim()).length,
-      0,
-    );
-    const filled = items.reduce(
-      (n, i) => n + i.body.filter((b) => b.kind === "text" && b.text_ar?.trim()).length,
-      0,
-    );
+    const isEmpty = (b: BodyBlock) =>
+      b.kind === "image" ? !b.imageUrl : b.kind === "embed" ? !b.embedUrl : !b.text_ar?.trim();
+    const emptySections = items.reduce((n, i) => n + i.body.filter(isEmpty).length, 0);
+    const filled = items.reduce((n, i) => n + i.body.filter((b) => !isEmpty(b)).length, 0);
     return {
       published: items.filter((i) => i.published).length,
       drafts: items.filter((i) => !i.published).length,
@@ -164,11 +174,12 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
     );
     if (error) {
       setStatus("error");
+      setSavedNotice(null);
       return;
     }
     setRows((r) => ({ ...r, [slug]: { slug, body, published } }));
-    setStatus("saved");
-    window.setTimeout(() => setStatus("idle"), 1800);
+    setStatus("idle");
+    setSavedNotice({ slug, published });
   }
 
   async function saveSettings(patch: Partial<SiteSettingsRow>) {
@@ -360,6 +371,40 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
           >
             + {c.addSection}
           </button>
+
+          {savedNotice && savedNotice.slug === current.slug && (
+            <div className="mt-6 rounded-xl border-2 border-[var(--primary)] bg-[var(--accent-soft)]/40 px-4 py-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm font-semibold text-[var(--primary)]">
+                  ✓ {savedNotice.published ? c.savedLive : c.savedDraft}
+                </p>
+                <div className="flex items-center gap-2">
+                  {savedNotice.published && (
+                    <a
+                      href={`/${locale}/${current.type === "dua" ? "duas" : current.type === "ziyara" ? "ziyarat" : "collections"}/${current.slug}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-lg bg-[var(--primary)] px-3 py-1.5 text-xs font-medium text-white"
+                    >
+                      {c.viewPage}
+                    </a>
+                  )}
+                  <button
+                    onClick={() => setSavedNotice(null)}
+                    className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs"
+                  >
+                    {c.dismiss}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {status === "error" && (
+            <div className="mt-6 rounded-xl border-2 border-red-500 px-4 py-4">
+              <p className="text-sm font-semibold text-red-600 dark:text-red-400">{c.saveFailed}</p>
+            </div>
+          )}
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3">
             <label className="flex items-center gap-2 text-sm">

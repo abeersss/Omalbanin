@@ -57,7 +57,7 @@ export default function SectionBlock({
       {block.kind === "image" && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={block.imageUrl}
+          src={(locale === "en" && block.imageUrl_en) || block.imageUrl}
           alt={(locale === "ar" ? block.imageAlt_ar : block.imageAlt_en) || ""}
           className="mx-auto max-w-full rounded-xl border border-[var(--border)]"
           loading="lazy"

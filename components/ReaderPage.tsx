@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Locale, t } from "@/lib/i18n";
 import { ContentItem } from "@/content/types";
-import ContentReader from "./ContentReader";
+import LiveReader from "./LiveReader";
 import VerificationBadge from "./VerificationBadge";
 
 export default function ReaderPage({
@@ -44,13 +44,12 @@ export default function ReaderPage({
         )}
       </header>
 
-      {item.published ? (
-        <ContentReader slug={item.slug} locale={l} body={item.body} />
-      ) : (
-        <div className="rounded-2xl border border-dashed border-[var(--border)] p-8 text-center text-[var(--ink-soft)]">
-          {t(l, "coming_soon")}
-        </div>
-      )}
+      <LiveReader
+        slug={item.slug}
+        locale={l}
+        staticBody={item.body}
+        staticPublished={item.published}
+      />
 
       {item.related_content && item.related_content.length > 0 && (
         <div className="mt-12 border-t border-[var(--border)] pt-6">

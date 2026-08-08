@@ -42,6 +42,10 @@ export interface BodyBlock {
    * nothing is ever auto-filled. */
   awaitingText?: boolean;
   imageUrl?: string;
+  /** Optional English-language variant of the image, for pages whose artwork
+   *  carries Arabic text baked in. Falls back to imageUrl when unset, so a
+   *  single shared image stays the common case. */
+  imageUrl_en?: string;
   imageAlt_ar?: string;
   imageAlt_en?: string;
   embedUrl?: string;
