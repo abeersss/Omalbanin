@@ -25,6 +25,16 @@ const copy = {
     kindText: "نص",
     kindImage: "صورة",
     kindEmbed: "رابط خارجي",
+    kindPdf: "كتاب PDF",
+    headingAr: "عنوان القسم (عربي)",
+    headingEn: "عنوان القسم (إنجليزي)",
+    textEnFull: "النص الإنجليزي",
+    noteArFull: "ملاحظة (عربي)",
+    noteEnFull: "ملاحظة (إنجليزي)",
+    pdfFile: "ملف PDF",
+    pdfHint: "بعد الرفع سيُعرض الملف ككتاب يُقلَّب، وليس كرابط تحميل.",
+    uploadPdf: "رفع ملف PDF",
+    removePdf: "إزالة الملف",
     imageAr: "الصورة (العربية)",
     imageEn: "الصورة (الإنجليزية) - اختياري",
     imageEnHint: "اتركها فارغة لاستخدام الصورة نفسها في اللغتين.",
@@ -57,6 +67,16 @@ const copy = {
     kindText: "Text",
     kindImage: "Image",
     kindEmbed: "External link",
+    kindPdf: "PDF book",
+    headingAr: "Section heading (Arabic)",
+    headingEn: "Section heading (English)",
+    textEnFull: "English text",
+    noteArFull: "Note (Arabic)",
+    noteEnFull: "Note (English)",
+    pdfFile: "PDF file",
+    pdfHint: "Once uploaded it is shown as a page-turning book, not a download link.",
+    uploadPdf: "Upload a PDF",
+    removePdf: "Remove file",
     imageAr: "Image (Arabic)",
     imageEn: "Image (English) - optional",
     imageEnHint: "Leave empty to use the same image for both languages.",
@@ -78,6 +98,9 @@ const copy = {
 async function uploadImage(file: File): Promise<string | null> {
   const sb = getSupabase();
   if (!sb) return null;
+  // Arabic filenames would otherwise become percent-encoded object keys that
+  // are painful to trace in the bucket, so the name is reduced to a safe slug
+  // and made unique with a timestamp.
   const safe = file.name.replace(/[^\w.-]/g, "_");
   const path = `${Date.now()}-${safe}`;
   const { error } = await sb.storage.from("media").upload(path, file, { upsert: false });
@@ -109,6 +132,19 @@ export default function SectionEditor({
       return;
     }
     update(i, { [field]: url } as Partial<BodyBlock>);
+  }
+
+  async function pickAndUploadPdf(i: number, file?: File) {
+    if (!file) return;
+    setUploadErr(null);
+    setBusyAt(`${i}:pdf`);
+    const url = await uploadImage(file);
+    setBusyAt(null);
+    if (!url) {
+      setUploadErr(c.uploadFailed);
+      return;
+    }
+    update(i, { pdfUrl: url, kind: "pdf" });
   }
 
   function update(i: number, patch: Partial<BodyBlock>) {
@@ -188,32 +224,91 @@ export default function SectionEditor({
               >
                 <option value="text">{c.kindText}</option>
                 <option value="image">{c.kindImage}</option>
+                <option value="pdf">{c.kindPdf}</option>
                 <option value="embed">{c.kindEmbed}</option>
               </select>
             </label>
 
-            <label className="mb-3 block">
-              <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.heading}</span>
-              <input
-                value={(locale === "ar" ? b.heading_ar : b.heading_en) ?? ""}
-                onChange={(e) =>
-                  update(i, locale === "ar" ? { heading_ar: e.target.value } : { heading_en: e.target.value })
-                }
-                className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
-              />
-            </label>
-
-            {b.kind === "text" && (
-              <label className="mb-3 block">
-                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.textAr}</span>
-                <textarea
+            {/* Both languages are always shown. Previously each field followed
+                the dashboard's own language, so the English side of a section
+                was unreachable from the Arabic dashboard. */}
+            <div className="mb-3 grid gap-3 sm:grid-cols-2">
+              <label className="block">
+                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.headingAr}</span>
+                <input
                   dir="rtl"
-                  rows={8}
-                  value={b.text_ar ?? ""}
-                  onChange={(e) => update(i, { text_ar: e.target.value })}
-                  className="devotional w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-base leading-loose"
+                  value={b.heading_ar ?? ""}
+                  onChange={(e) => update(i, { heading_ar: e.target.value })}
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
                 />
               </label>
+              <label className="block">
+                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.headingEn}</span>
+                <input
+                  dir="ltr"
+                  value={b.heading_en ?? ""}
+                  onChange={(e) => update(i, { heading_en: e.target.value })}
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                />
+              </label>
+            </div>
+
+            {b.kind === "text" && (
+              <div className="mb-3 space-y-3">
+                <label className="block">
+                  <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.textAr}</span>
+                  <textarea
+                    dir="rtl"
+                    rows={8}
+                    value={b.text_ar ?? ""}
+                    onChange={(e) => update(i, { text_ar: e.target.value })}
+                    className="devotional w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-base leading-loose"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.textEnFull}</span>
+                  <textarea
+                    dir="ltr"
+                    rows={5}
+                    value={b.text_en ?? ""}
+                    onChange={(e) => update(i, { text_en: e.target.value })}
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                  />
+                </label>
+              </div>
+            )}
+
+            {b.kind === "pdf" && (
+              <div className="mb-3 space-y-3">
+                <span className="block text-xs text-[var(--ink-soft)]">{c.pdfFile}</span>
+                {b.pdfUrl && (
+                  <p className="break-all rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-xs" dir="ltr">
+                    {b.pdfUrl}
+                  </p>
+                )}
+                <div className="flex flex-wrap items-center gap-2">
+                  <label className="cursor-pointer rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs hover:border-[var(--accent)]">
+                    {busyAt === `${i}:pdf` ? c.uploading : c.uploadPdf}
+                    <input
+                      type="file"
+                      accept="application/pdf"
+                      className="hidden"
+                      onChange={(e) => pickAndUploadPdf(i, e.target.files?.[0])}
+                    />
+                  </label>
+                  {b.pdfUrl && (
+                    <button
+                      type="button"
+                      onClick={() => update(i, { pdfUrl: undefined })}
+                      className="rounded-lg border border-red-300 px-3 py-1.5 text-xs text-red-600 dark:border-red-800 dark:text-red-400"
+                    >
+                      {c.removePdf}
+                    </button>
+                  )}
+                </div>
+                <span className="block text-[11px] text-[var(--ink-soft)]">{c.pdfHint}</span>
+                {uploadErr && <p className="text-sm text-red-600 dark:text-red-400">{uploadErr}</p>}
+              </div>
             )}
 
             {b.kind === "image" && (
@@ -307,30 +402,30 @@ export default function SectionEditor({
 
             <details className="text-sm">
               <summary className="cursor-pointer text-xs text-[var(--ink-soft)]">
-                {c.textEn} / {c.note} / {c.repeat}
+                {c.note} / {c.repeat}
               </summary>
               <div className="mt-3 space-y-3">
-                <label className="block">
-                  <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.textEn}</span>
-                  <textarea
-                    dir="ltr"
-                    rows={4}
-                    value={b.text_en ?? ""}
-                    onChange={(e) => update(i, { text_en: e.target.value })}
-                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
-                  />
-                </label>
-                <label className="block">
-                  <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.note}</span>
-                  <input
-                    value={(locale === "ar" ? b.note_ar : b.note_en) ?? ""}
-                    onChange={(e) =>
-                      update(i, locale === "ar" ? { note_ar: e.target.value } : { note_en: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
-                  />
-                  <span className="mt-1 block text-[11px] text-[var(--ink-soft)]">{c.noteHint}</span>
-                </label>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.noteArFull}</span>
+                    <input
+                      dir="rtl"
+                      value={b.note_ar ?? ""}
+                      onChange={(e) => update(i, { note_ar: e.target.value })}
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.noteEnFull}</span>
+                    <input
+                      dir="ltr"
+                      value={b.note_en ?? ""}
+                      onChange={(e) => update(i, { note_en: e.target.value })}
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                    />
+                  </label>
+                </div>
+                <span className="block text-[11px] text-[var(--ink-soft)]">{c.noteHint}</span>
                 <label className="block">
                   <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.repeat}</span>
                   <input

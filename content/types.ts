@@ -23,8 +23,11 @@ export interface SourceInfo {
 
 export interface BodyBlock {
   /** "text" = real migrated/authored Arabic-English text. "image" = legacy image,
-   * preserved verbatim rather than re-typed. "embed" = external viewer (e.g. AnyFlip / YouTube). */
-  kind: "text" | "image" | "embed";
+   * preserved verbatim rather than re-typed. "embed" = external viewer (e.g. AnyFlip / YouTube).
+   * "pdf" = an uploaded booklet, rendered in the page-turning reader. */
+  kind: "text" | "image" | "embed" | "pdf";
+  /** Uploaded PDF, shown as a flipping book rather than a download link. */
+  pdfUrl?: string;
   heading_ar?: string;
   heading_en?: string;
   text_ar?: string;

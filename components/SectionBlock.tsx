@@ -1,5 +1,10 @@
+import dynamic from "next/dynamic";
 import { Locale, t } from "@/lib/i18n";
 import { BodyBlock } from "@/content/types";
+
+// pdf.js is large and only needed when a booklet is actually present, so it is
+// loaded on demand rather than shipped with every page.
+const PdfFlipBook = dynamic(() => import("./PdfFlipBook"));
 
 /**
  * Renders one body block for both the scrolling reader and the flipbook, so
@@ -63,6 +68,8 @@ export default function SectionBlock({
           loading="lazy"
         />
       )}
+
+      {block.kind === "pdf" && block.pdfUrl && <PdfFlipBook url={block.pdfUrl} locale={locale} />}
 
       {block.kind === "embed" && (
         <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">

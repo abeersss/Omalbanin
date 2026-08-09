@@ -32,6 +32,10 @@ const copy = {
     publishHint: "لا تنشر إلا بعد مراجعة النص كاملاً.",
     addSection: "إضافة قسم جديد",
     newSection: "قسم جديد",
+    titleAr: "العنوان (عربي)",
+    titleEn: "العنوان (إنجليزي)",
+    summaryAr: "الوصف المختصر (عربي)",
+    summaryEn: "الوصف المختصر (إنجليزي)",
     hijri: "تعديل التاريخ الهجري (بالأيام)",
     hijriHint: "استخدم +1 أو -1 حسب رؤية الهلال.",
     featuredDua: "دعاء اليوم المختار",
@@ -66,6 +70,10 @@ const copy = {
     publishHint: "Only publish once the text has been fully reviewed.",
     addSection: "Add a new section",
     newSection: "New section",
+    titleAr: "Title (Arabic)",
+    titleEn: "Title (English)",
+    summaryAr: "Short summary (Arabic)",
+    summaryEn: "Short summary (English)",
     hijri: "Hijri date adjustment (days)",
     hijriHint: "Use +1 or -1 according to the moon sighting.",
     featuredDua: "Featured dua of the day",
@@ -82,6 +90,10 @@ type Row = {
   slug: string;
   body: BodyBlock[];
   published: boolean;
+  title_ar?: string;
+  title_en?: string;
+  summary_ar?: string;
+  summary_en?: string;
 };
 
 export default function AdminDashboard({ session, locale }: { session: Session; locale: Locale }) {
@@ -105,7 +117,7 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
   const load = useCallback(async () => {
     if (!sb) return;
     const [{ data: content }, { data: s }, { data: adminOk }] = await Promise.all([
-      sb.from("content_items").select("slug, body, published"),
+      sb.from("content_items").select("slug, body, published, title_ar, title_en, summary_ar, summary_en"),
       sb.from("site_settings").select("*").eq("id", 1).maybeSingle(),
       sb.rpc("is_admin"),
     ]);
@@ -134,6 +146,10 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
           ...item,
           body: row?.body ?? item.body,
           published: row?.published ?? item.published,
+          title_ar: row?.title_ar || item.title_ar,
+          title_en: row?.title_en || item.title_en,
+          summary_ar: row?.summary_ar ?? item.summary_ar,
+          summary_en: row?.summary_en ?? item.summary_en,
         };
       }),
     [rows],
@@ -154,6 +170,24 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
       percent: filled + emptySections === 0 ? 100 : Math.round((filled / (filled + emptySections)) * 100),
     };
   }, [items]);
+
+  function patchCurrent(patch: Partial<Row>) {
+    if (!current) return;
+    setRows((r) => {
+      // Seed from the merged view the first time this item is touched, so an
+      // edit to one field does not blank the others.
+      const existing: Row = r[current.slug] ?? {
+        slug: current.slug,
+        body: current.body,
+        published: current.published,
+        title_ar: current.title_ar,
+        title_en: current.title_en,
+        summary_ar: current.summary_ar,
+        summary_en: current.summary_en,
+      };
+      return { ...r, [current.slug]: { ...existing, ...patch } };
+    });
+  }
 
   async function saveItem(slug: string, body: BodyBlock[], published: boolean) {
     if (!sb || !current) return;
@@ -177,7 +211,18 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
       setSavedNotice(null);
       return;
     }
-    setRows((r) => ({ ...r, [slug]: { slug, body, published } }));
+    setRows((r) => ({
+      ...r,
+      [slug]: {
+        slug,
+        body,
+        published,
+        title_ar: current.title_ar,
+        title_en: current.title_en,
+        summary_ar: current.summary_ar,
+        summary_en: current.summary_en,
+      },
+    }));
     setStatus("idle");
     setSavedNotice({ slug, published });
   }
@@ -346,6 +391,51 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
             {locale === "ar" ? "→" : "←"} {c.back}
           </button>
           <h2 className="mb-4 text-xl font-bold">{locale === "ar" ? current.title_ar : current.title_en}</h2>
+
+          {/* Titles and summaries were previously fixed in code, so the English
+              title in particular could not be changed at all. */}
+          <div className="mb-6 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="block">
+                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.titleAr}</span>
+                <input
+                  dir="rtl"
+                  value={current.title_ar ?? ""}
+                  onChange={(e) => patchCurrent({ title_ar: e.target.value })}
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.titleEn}</span>
+                <input
+                  dir="ltr"
+                  value={current.title_en ?? ""}
+                  onChange={(e) => patchCurrent({ title_en: e.target.value })}
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.summaryAr}</span>
+                <textarea
+                  dir="rtl"
+                  rows={2}
+                  value={current.summary_ar ?? ""}
+                  onChange={(e) => patchCurrent({ summary_ar: e.target.value })}
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.summaryEn}</span>
+                <textarea
+                  dir="ltr"
+                  rows={2}
+                  value={current.summary_en ?? ""}
+                  onChange={(e) => patchCurrent({ summary_en: e.target.value })}
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                />
+              </label>
+            </div>
+          </div>
 
           <SectionEditor
             blocks={current.body}

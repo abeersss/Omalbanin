@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored pdf.js worker, copied from pdfjs-dist and shipped as-is. It is
+    // third-party minified output, so linting it produces thousands of
+    // meaningless warnings and no actionable signal.
+    "public/pdfjs/**",
   ]),
 ]);
 
