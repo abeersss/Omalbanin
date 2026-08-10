@@ -6,6 +6,7 @@ import { Locale, t } from "@/lib/i18n";
 import { formatGregorian, formatHijri, gregorianToHijri, toArabicDigits } from "@/lib/hijri";
 import { getTodaySelections } from "@/lib/today";
 import { siteConfig } from "@/lib/site-config";
+import { useSiteSettings } from "@/lib/useSiteSettings";
 import DashboardCard from "./DashboardCard";
 
 function DateStrip({ locale, selected, onSelect }: { locale: Locale; selected: Date; onSelect: (d: Date) => void }) {
@@ -54,6 +55,8 @@ function DateStrip({ locale, selected, onSelect }: { locale: Locale; selected: D
 export default function TodayDashboard({ locale }: { locale: Locale }) {
   const [now, setNow] = useState<Date | null>(null);
   const [selected, setSelected] = useState<Date | null>(null);
+  // Moon-sighting adjustment and featured overrides, as set in the dashboard.
+  const { hijriAdjustmentDays, featuredDuaSlug, featuredZiyaraSlug } = useSiteSettings();
 
   useEffect(() => {
     // The visitor's real current date must come from the browser, not from
@@ -74,8 +77,12 @@ export default function TodayDashboard({ locale }: { locale: Locale }) {
     );
   }
 
-  const hijri = gregorianToHijri(selected);
-  const { occasions, weekday } = getTodaySelections(selected);
+  const hijri = gregorianToHijri(selected, hijriAdjustmentDays);
+  const { occasions, weekday } = getTodaySelections(selected, {
+    hijriAdjustmentDays,
+    featuredDuaSlug,
+    featuredZiyaraSlug,
+  });
   const isFriday = selected.getDay() === 5;
 
   return (

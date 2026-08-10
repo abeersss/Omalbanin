@@ -43,13 +43,17 @@ export const HIJRI_MONTHS_EN = [
  * Converts a Gregorian date to a Shia-usable Hijri date.
  *
  * IMPORTANT: tabular/astronomical calculation cannot capture local moon-sighting
- * announcements, which is why `siteConfig.hijriAdjustmentDays` exists - an
- * administrator can shift the displayed date by -2..+2 days (see lib/site-config.ts)
- * without touching this code, to reflect a moon-sighting committee's announcement.
+ * announcements, which is why an adjustment exists - the displayed date can be
+ * shifted by -2..+2 days to reflect a moon-sighting committee's announcement.
+ *
+ * `offsetDays` comes from the admin dashboard at runtime. It is passed in rather
+ * than read here so this stays a pure function, and so the setting can change
+ * without rebuilding the site. When omitted it falls back to the value baked
+ * into lib/site-config.ts, which is what the prerendered HTML uses.
  */
-export function gregorianToHijri(date: Date): HijriDate {
+export function gregorianToHijri(date: Date, offsetDays?: number): HijriDate {
   const adjusted = new Date(date);
-  adjusted.setDate(adjusted.getDate() + siteConfig.hijriAdjustmentDays);
+  adjusted.setDate(adjusted.getDate() + (offsetDays ?? siteConfig.hijriAdjustmentDays));
 
   const { hy, hm, hd } = rawToHijri(
     adjusted.getFullYear(),
