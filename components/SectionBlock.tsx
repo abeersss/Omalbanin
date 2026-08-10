@@ -69,7 +69,12 @@ export default function SectionBlock({
         />
       )}
 
-      {block.kind === "pdf" && block.pdfUrl && <PdfFlipBook url={block.pdfUrl} locale={locale} />}
+      {block.kind === "pdf" && ((locale === "en" && block.pdfUrl_en) || block.pdfUrl) && (
+        <PdfFlipBook
+          url={((locale === "en" && block.pdfUrl_en) || block.pdfUrl) as string}
+          locale={locale}
+        />
+      )}
 
       {block.kind === "embed" && (
         <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">

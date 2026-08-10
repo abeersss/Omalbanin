@@ -28,6 +28,9 @@ export interface BodyBlock {
   kind: "text" | "image" | "embed" | "pdf";
   /** Uploaded PDF, shown as a flipping book rather than a download link. */
   pdfUrl?: string;
+  /** English-language edition of the booklet. Falls back to pdfUrl when unset,
+   *  matching how imageUrl_en behaves, so a single shared file stays valid. */
+  pdfUrl_en?: string;
   heading_ar?: string;
   heading_en?: string;
   text_ar?: string;

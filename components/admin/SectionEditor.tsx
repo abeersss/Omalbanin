@@ -31,7 +31,9 @@ const copy = {
     textEnFull: "النص الإنجليزي",
     noteArFull: "ملاحظة (عربي)",
     noteEnFull: "ملاحظة (إنجليزي)",
-    pdfFile: "ملف PDF",
+    pdfAr: "ملف PDF (العربية)",
+    pdfEn: "ملف PDF (الإنجليزية) - اختياري",
+    pdfEnHint: "اتركه فارغاً لاستخدام الملف العربي في اللغتين.",
     pdfHint: "بعد الرفع سيُعرض الملف ككتاب يُقلَّب، وليس كرابط تحميل.",
     uploadPdf: "رفع ملف PDF",
     removePdf: "إزالة الملف",
@@ -73,7 +75,9 @@ const copy = {
     textEnFull: "English text",
     noteArFull: "Note (Arabic)",
     noteEnFull: "Note (English)",
-    pdfFile: "PDF file",
+    pdfAr: "PDF file (Arabic)",
+    pdfEn: "PDF file (English) - optional",
+    pdfEnHint: "Leave empty to use the Arabic file for both languages.",
     pdfHint: "Once uploaded it is shown as a page-turning book, not a download link.",
     uploadPdf: "Upload a PDF",
     removePdf: "Remove file",
@@ -134,17 +138,17 @@ export default function SectionEditor({
     update(i, { [field]: url } as Partial<BodyBlock>);
   }
 
-  async function pickAndUploadPdf(i: number, file?: File) {
+  async function pickAndUploadPdf(i: number, field: "pdfUrl" | "pdfUrl_en", file?: File) {
     if (!file) return;
     setUploadErr(null);
-    setBusyAt(`${i}:pdf`);
+    setBusyAt(`${i}:${field}`);
     const url = await uploadImage(file);
     setBusyAt(null);
     if (!url) {
       setUploadErr(c.uploadFailed);
       return;
     }
-    update(i, { pdfUrl: url, kind: "pdf" });
+    update(i, { [field]: url, kind: "pdf" } as Partial<BodyBlock>);
   }
 
   function update(i: number, patch: Partial<BodyBlock>) {
@@ -179,9 +183,11 @@ export default function SectionEditor({
         const written =
           b.kind === "image"
             ? Boolean(b.imageUrl)
-            : b.kind === "embed"
-              ? Boolean(b.embedUrl)
-              : Boolean(b.text_ar?.trim());
+            : b.kind === "pdf"
+              ? Boolean(b.pdfUrl || b.pdfUrl_en)
+              : b.kind === "embed"
+                ? Boolean(b.embedUrl)
+                : Boolean(b.text_ar?.trim());
         return (
           <div key={i} className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -279,33 +285,42 @@ export default function SectionEditor({
             )}
 
             {b.kind === "pdf" && (
-              <div className="mb-3 space-y-3">
-                <span className="block text-xs text-[var(--ink-soft)]">{c.pdfFile}</span>
-                {b.pdfUrl && (
-                  <p className="break-all rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-xs" dir="ltr">
-                    {b.pdfUrl}
-                  </p>
-                )}
-                <div className="flex flex-wrap items-center gap-2">
-                  <label className="cursor-pointer rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs hover:border-[var(--accent)]">
-                    {busyAt === `${i}:pdf` ? c.uploading : c.uploadPdf}
-                    <input
-                      type="file"
-                      accept="application/pdf"
-                      className="hidden"
-                      onChange={(e) => pickAndUploadPdf(i, e.target.files?.[0])}
-                    />
-                  </label>
-                  {b.pdfUrl && (
-                    <button
-                      type="button"
-                      onClick={() => update(i, { pdfUrl: undefined })}
-                      className="rounded-lg border border-red-300 px-3 py-1.5 text-xs text-red-600 dark:border-red-800 dark:text-red-400"
-                    >
-                      {c.removePdf}
-                    </button>
-                  )}
-                </div>
+              <div className="mb-3 space-y-4">
+                {(["pdfUrl", "pdfUrl_en"] as const).map((field) => (
+                  <div key={field}>
+                    <span className="mb-1 block text-xs text-[var(--ink-soft)]">
+                      {field === "pdfUrl" ? c.pdfAr : c.pdfEn}
+                    </span>
+                    {b[field] && (
+                      <p className="mb-2 break-all rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-xs" dir="ltr">
+                        {b[field]}
+                      </p>
+                    )}
+                    <div className="flex flex-wrap items-center gap-2">
+                      <label className="cursor-pointer rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs hover:border-[var(--accent)]">
+                        {busyAt === `${i}:${field}` ? c.uploading : c.uploadPdf}
+                        <input
+                          type="file"
+                          accept="application/pdf"
+                          className="hidden"
+                          onChange={(e) => pickAndUploadPdf(i, field, e.target.files?.[0])}
+                        />
+                      </label>
+                      {b[field] && (
+                        <button
+                          type="button"
+                          onClick={() => update(i, { [field]: undefined } as Partial<BodyBlock>)}
+                          className="rounded-lg border border-red-300 px-3 py-1.5 text-xs text-red-600 dark:border-red-800 dark:text-red-400"
+                        >
+                          {c.removePdf}
+                        </button>
+                      )}
+                    </div>
+                    {field === "pdfUrl_en" && (
+                      <span className="mt-1 block text-[11px] text-[var(--ink-soft)]">{c.pdfEnHint}</span>
+                    )}
+                  </div>
+                ))}
                 <span className="block text-[11px] text-[var(--ink-soft)]">{c.pdfHint}</span>
                 {uploadErr && <p className="text-sm text-red-600 dark:text-red-400">{uploadErr}</p>}
               </div>

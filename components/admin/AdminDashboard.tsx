@@ -159,7 +159,13 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
 
   const stats = useMemo(() => {
     const isEmpty = (b: BodyBlock) =>
-      b.kind === "image" ? !b.imageUrl : b.kind === "embed" ? !b.embedUrl : !b.text_ar?.trim();
+      b.kind === "image"
+        ? !b.imageUrl
+        : b.kind === "pdf"
+          ? !b.pdfUrl && !b.pdfUrl_en
+          : b.kind === "embed"
+            ? !b.embedUrl
+            : !b.text_ar?.trim();
     const emptySections = items.reduce((n, i) => n + i.body.filter(isEmpty).length, 0);
     const filled = items.reduce((n, i) => n + i.body.filter((b) => !isEmpty(b)).length, 0);
     return {
