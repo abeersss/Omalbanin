@@ -1,5 +1,6 @@
 import { Locale, t, locales } from "@/lib/i18n";
 import ContentCard from "@/components/ContentCard";
+import LiveIndex from "@/components/LiveIndex";
 import { legacyZiyarat } from "@/content";
 import { ziyaratPlaceholders } from "@/content/ziyarat";
 import type { Metadata } from "next";
@@ -29,6 +30,12 @@ export default async function ZiyaratPage(props: PageProps<"/[locale]/ziyarat">)
         {items.map((z) => (
           <ContentCard key={z.slug} item={z} locale={l} href={`/${l}/ziyarat/${z.slug}`} />
         ))}
+        <LiveIndex
+          types={["ziyara"]}
+          knownSlugs={items.map((z) => z.slug)}
+          locale={l}
+          hrefBase={`/${l}/ziyarat`}
+        />
       </div>
     </div>
   );

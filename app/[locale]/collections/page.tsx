@@ -1,5 +1,6 @@
 import { Locale, t, locales } from "@/lib/i18n";
 import ContentCard from "@/components/ContentCard";
+import LiveIndex from "@/components/LiveIndex";
 import { legacyCollections } from "@/content";
 import type { Metadata } from "next";
 
@@ -27,6 +28,12 @@ export default async function CollectionsPage(props: PageProps<"/[locale]/collec
         {legacyCollections.map((c) => (
           <ContentCard key={c.slug} item={c} locale={l} href={`/${l}/collections/${c.slug}`} />
         ))}
+        <LiveIndex
+          types={["collection", "article", "amal"]}
+          knownSlugs={legacyCollections.map((c) => c.slug)}
+          locale={l}
+          hrefBase={`/${l}/collections`}
+        />
       </div>
     </div>
   );

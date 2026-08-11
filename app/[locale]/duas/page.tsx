@@ -1,5 +1,6 @@
 import { Locale, t, locales } from "@/lib/i18n";
 import ContentCard from "@/components/ContentCard";
+import LiveIndex from "@/components/LiveIndex";
 import { duas } from "@/content/duas";
 import type { Metadata } from "next";
 
@@ -27,6 +28,7 @@ export default async function DuasPage(props: PageProps<"/[locale]/duas">) {
         {duas.map((d) => (
           <ContentCard key={d.slug} item={d} locale={l} href={`/${l}/duas/${d.slug}`} />
         ))}
+        <LiveIndex types={["dua"]} knownSlugs={duas.map((d) => d.slug)} locale={l} hrefBase={`/${l}/duas`} />
       </div>
     </div>
   );

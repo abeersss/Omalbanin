@@ -5,6 +5,7 @@ import type { Session } from "@supabase/supabase-js";
 import { getSupabase, SiteSettingsRow } from "@/lib/supabase";
 import { Locale } from "@/lib/i18n";
 import { editableContent, BodyBlock, ContentItem } from "@/content";
+import { slugify } from "@/lib/slug";
 import SectionEditor from "./SectionEditor";
 
 const copy = {
@@ -38,8 +39,8 @@ const copy = {
     summaryEn: "الوصف المختصر (إنجليزي)",
     newPage: "+ صفحة جديدة",
     newPageTitle: "إنشاء صفحة جديدة",
-    pageAddress: "عنوان الصفحة في الرابط",
-    pageAddressHint: "حروف إنجليزية صغيرة وشرطات فقط، مثل: dua-ahad",
+    pageAddress: "رابط الصفحة",
+    pageAddressHint: "يُكتب تلقائياً من العنوان. عدّله إن أردت، بحروف إنجليزية صغيرة وشرطات فقط.",
     pageType: "النوع",
     typeDua: "دعاء",
     typeZiyara: "زيارة",
@@ -96,8 +97,8 @@ const copy = {
     summaryEn: "Short summary (English)",
     newPage: "+ New page",
     newPageTitle: "Create a new page",
-    pageAddress: "Page address in the URL",
-    pageAddressHint: "Lowercase letters and hyphens only, e.g. dua-ahad",
+    pageAddress: "Page link",
+    pageAddressHint: "Written for you from the title. Edit it if you like, using lowercase letters and hyphens only.",
     pageType: "Type",
     typeDua: "Dua",
     typeZiyara: "Ziyara",
@@ -155,6 +156,9 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
   const [newSlug, setNewSlug] = useState("");
   const [newTitleAr, setNewTitleAr] = useState("");
   const [newTitleEn, setNewTitleEn] = useState("");
+  /** The address is written for you from the title. Once it is edited by hand
+   *  it stops following the title, so a deliberate choice is never overwritten. */
+  const [slugEdited, setSlugEdited] = useState(false);
   const [newType, setNewType] = useState<ContentItem["type"]>("article");
   const [newErr, setNewErr] = useState<string | null>(null);
 
@@ -269,6 +273,7 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
     setNewSlug("");
     setNewTitleAr("");
     setNewTitleEn("");
+    setSlugEdited(false);
     await load();
     setEditing(slug);
   }
@@ -461,6 +466,7 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
               onClick={() => {
                 setNewOpen(true);
                 setNewErr(null);
+                setSlugEdited(false);
               }}
               className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-white"
             >
@@ -469,24 +475,16 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
           ) : (
             <div className="illuminated space-y-3 px-5 py-5">
               <p className="font-semibold text-[var(--primary)]">{c.newPageTitle}</p>
-              <label className="block">
-                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.pageAddress}</span>
-                <input
-                  dir="ltr"
-                  value={newSlug}
-                  onChange={(e) => setNewSlug(e.target.value)}
-                  placeholder="dua-ahad"
-                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
-                />
-                <span className="mt-1 block text-[11px] text-[var(--ink-soft)]">{c.pageAddressHint}</span>
-              </label>
               <div className="grid gap-3 sm:grid-cols-2">
                 <label className="block">
                   <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.titleAr}</span>
                   <input
                     dir="rtl"
                     value={newTitleAr}
-                    onChange={(e) => setNewTitleAr(e.target.value)}
+                    onChange={(e) => {
+                      setNewTitleAr(e.target.value);
+                      if (!slugEdited && !newTitleEn.trim()) setNewSlug(slugify(e.target.value));
+                    }}
                     className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
                   />
                 </label>
@@ -495,11 +493,33 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
                   <input
                     dir="ltr"
                     value={newTitleEn}
-                    onChange={(e) => setNewTitleEn(e.target.value)}
+                    onChange={(e) => {
+                      setNewTitleEn(e.target.value);
+                      if (!slugEdited) setNewSlug(slugify(e.target.value) || slugify(newTitleAr));
+                    }}
                     className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
                   />
                 </label>
               </div>
+              <label className="block">
+                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.pageAddress}</span>
+                <div className="flex items-center gap-1 rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2">
+                  <span dir="ltr" className="shrink-0 text-sm text-[var(--ink-soft)]">
+                    omalbnin.com/{locale}/{newType === "dua" ? "duas" : newType === "ziyara" ? "ziyarat" : "collections"}/
+                  </span>
+                  <input
+                    dir="ltr"
+                    value={newSlug}
+                    onChange={(e) => {
+                      setNewSlug(e.target.value);
+                      setSlugEdited(true);
+                    }}
+                    placeholder="dua-ahad"
+                    className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+                  />
+                </div>
+                <span className="mt-1 block text-[11px] text-[var(--ink-soft)]">{c.pageAddressHint}</span>
+              </label>
               <label className="block">
                 <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.pageType}</span>
                 <select
