@@ -36,6 +36,26 @@ const copy = {
     titleEn: "العنوان (إنجليزي)",
     summaryAr: "الوصف المختصر (عربي)",
     summaryEn: "الوصف المختصر (إنجليزي)",
+    newPage: "+ صفحة جديدة",
+    newPageTitle: "إنشاء صفحة جديدة",
+    pageAddress: "عنوان الصفحة في الرابط",
+    pageAddressHint: "حروف إنجليزية صغيرة وشرطات فقط، مثل: dua-ahad",
+    pageType: "النوع",
+    typeDua: "دعاء",
+    typeZiyara: "زيارة",
+    typeArticle: "صفحة / مقال",
+    create: "إنشاء",
+    cancel: "إلغاء",
+    slugTaken: "هذا العنوان مستخدم بالفعل.",
+    slugInvalid: "استخدم حروفاً إنجليزية صغيرة وأرقاماً وشرطات فقط.",
+    titleRequired: "أدخل العنوان العربي.",
+    deletePage: "حذف",
+    confirmDeletePage: "حذف هذه الصفحة نهائياً؟ لا يمكن التراجع.",
+    hidePage: "إخفاء عن الزوار",
+    builtInNote: "صفحة أساسية - يمكن إخفاؤها لكن لا يمكن حذفها.",
+    deleted: "تم الحذف.",
+    hidden: "تم الإخفاء عن الزوار.",
+    liveAt: "الرابط",
     hijri: "تعديل التاريخ الهجري (بالأيام)",
     hijriHint: "استخدم +1 أو -1 حسب رؤية الهلال.",
     featuredDua: "دعاء اليوم المختار",
@@ -74,6 +94,26 @@ const copy = {
     titleEn: "Title (English)",
     summaryAr: "Short summary (Arabic)",
     summaryEn: "Short summary (English)",
+    newPage: "+ New page",
+    newPageTitle: "Create a new page",
+    pageAddress: "Page address in the URL",
+    pageAddressHint: "Lowercase letters and hyphens only, e.g. dua-ahad",
+    pageType: "Type",
+    typeDua: "Dua",
+    typeZiyara: "Ziyara",
+    typeArticle: "Page / article",
+    create: "Create",
+    cancel: "Cancel",
+    slugTaken: "That address is already in use.",
+    slugInvalid: "Use lowercase letters, numbers and hyphens only.",
+    titleRequired: "Enter the Arabic title.",
+    deletePage: "Delete",
+    confirmDeletePage: "Delete this page permanently? This cannot be undone.",
+    hidePage: "Hide from visitors",
+    builtInNote: "Built-in page - can be hidden but not deleted.",
+    deleted: "Deleted.",
+    hidden: "Hidden from visitors.",
+    liveAt: "Address",
     hijri: "Hijri date adjustment (days)",
     hijriHint: "Use +1 or -1 according to the moon sighting.",
     featuredDua: "Featured dua of the day",
@@ -111,6 +151,12 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
    *  that cleared itself after under two seconds, which read as "nothing
    *  happened" and left the owner unsure whether the save had worked. */
   const [savedNotice, setSavedNotice] = useState<{ slug: string; published: boolean } | null>(null);
+  const [newOpen, setNewOpen] = useState(false);
+  const [newSlug, setNewSlug] = useState("");
+  const [newTitleAr, setNewTitleAr] = useState("");
+  const [newTitleEn, setNewTitleEn] = useState("");
+  const [newType, setNewType] = useState<ContentItem["type"]>("article");
+  const [newErr, setNewErr] = useState<string | null>(null);
 
   // `loading` already starts true, so this does not set it synchronously; the
   // first state update happens after the awaited round trip resolves.
@@ -138,22 +184,40 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
 
   /** Bundled content is the starting point; a saved row overrides it. This
    *  avoids a separate seeding step, so the dashboard is usable immediately. */
-  const items = useMemo(
-    () =>
-      editableContent.map((item: ContentItem) => {
-        const row = rows[item.slug];
-        return {
-          ...item,
-          body: row?.body ?? item.body,
-          published: row?.published ?? item.published,
-          title_ar: row?.title_ar || item.title_ar,
-          title_en: row?.title_en || item.title_en,
-          summary_ar: row?.summary_ar ?? item.summary_ar,
-          summary_en: row?.summary_en ?? item.summary_en,
-        };
-      }),
-    [rows],
-  );
+  const items = useMemo(() => {
+    const merged = editableContent.map((item: ContentItem) => {
+      const row = rows[item.slug];
+      return {
+        ...item,
+        body: row?.body ?? item.body,
+        published: row?.published ?? item.published,
+        title_ar: row?.title_ar || item.title_ar,
+        title_en: row?.title_en || item.title_en,
+        summary_ar: row?.summary_ar ?? item.summary_ar,
+        summary_en: row?.summary_en ?? item.summary_en,
+      };
+    });
+
+    // Pages created in the dashboard exist only in the database, so they would
+    // otherwise never appear in this list.
+    const known = new Set(merged.map((i) => i.slug));
+    const createdHere: ContentItem[] = Object.values(rows)
+      .filter((r) => !known.has(r.slug))
+      .map((r) => ({
+        id: r.slug,
+        slug: r.slug,
+        type: "article" as ContentItem["type"],
+        title_ar: r.title_ar ?? r.slug,
+        title_en: r.title_en ?? r.slug,
+        summary_ar: r.summary_ar ?? "",
+        summary_en: r.summary_en ?? "",
+        body: r.body ?? [],
+        verification_status: "needs_verification" as ContentItem["verification_status"],
+        published: r.published,
+      }));
+
+    return [...merged, ...createdHere];
+  }, [rows]);
 
   const current = items.find((i) => i.slug === editing) ?? null;
 
@@ -176,6 +240,78 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
       percent: filled + emptySections === 0 ? 100 : Math.round((filled / (filled + emptySections)) * 100),
     };
   }, [items]);
+
+  /** Slugs defined in code. These render as real files at build time, so the
+   *  row can be hidden but the page itself cannot be removed from the server
+   *  by deleting a database row. */
+  const builtInSlugs = useMemo(() => new Set(editableContent.map((i) => i.slug)), []);
+
+  async function createPage(slug: string, type: ContentItem["type"], titleAr: string, titleEn: string) {
+    if (!sb) return;
+    setStatus("saving");
+    const { error } = await sb.from("content_items").insert({
+      slug,
+      type,
+      title_ar: titleAr,
+      title_en: titleEn || titleAr,
+      summary_ar: "",
+      summary_en: "",
+      body: [],
+      published: false,
+      updated_at: new Date().toISOString(),
+    });
+    if (error) {
+      setStatus("error");
+      return;
+    }
+    setStatus("idle");
+    setNewOpen(false);
+    setNewSlug("");
+    setNewTitleAr("");
+    setNewTitleEn("");
+    await load();
+    setEditing(slug);
+  }
+
+  async function removePage(slug: string) {
+    if (!sb) return;
+    const builtIn = builtInSlugs.has(slug);
+    if (!window.confirm(builtIn ? c.hidePage + "?" : c.confirmDeletePage)) return;
+    setStatus("saving");
+
+    if (builtIn) {
+      // Hide rather than delete: the page exists as a file on the server, so
+      // only its published flag can be controlled from here.
+      const item = items.find((i) => i.slug === slug);
+      const { error } = await sb.from("content_items").upsert(
+        {
+          slug,
+          type: item?.type ?? "article",
+          title_ar: item?.title_ar ?? "",
+          title_en: item?.title_en ?? "",
+          body: item?.body ?? [],
+          published: false,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "slug" },
+      );
+      if (error) {
+        setStatus("error");
+        return;
+      }
+    } else {
+      const { error } = await sb.from("content_items").delete().eq("slug", slug);
+      if (error) {
+        setStatus("error");
+        return;
+      }
+    }
+
+    setStatus("idle");
+    setEditing(null);
+    setSavedNotice(null);
+    await load();
+  }
 
   function patchCurrent(patch: Partial<Row>) {
     if (!current) return;
@@ -319,6 +455,94 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
       )}
 
       {!editing && tab === "content" && (
+        <div className="mb-4">
+          {!newOpen ? (
+            <button
+              onClick={() => {
+                setNewOpen(true);
+                setNewErr(null);
+              }}
+              className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-white"
+            >
+              {c.newPage}
+            </button>
+          ) : (
+            <div className="illuminated space-y-3 px-5 py-5">
+              <p className="font-semibold text-[var(--primary)]">{c.newPageTitle}</p>
+              <label className="block">
+                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.pageAddress}</span>
+                <input
+                  dir="ltr"
+                  value={newSlug}
+                  onChange={(e) => setNewSlug(e.target.value)}
+                  placeholder="dua-ahad"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                />
+                <span className="mt-1 block text-[11px] text-[var(--ink-soft)]">{c.pageAddressHint}</span>
+              </label>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.titleAr}</span>
+                  <input
+                    dir="rtl"
+                    value={newTitleAr}
+                    onChange={(e) => setNewTitleAr(e.target.value)}
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.titleEn}</span>
+                  <input
+                    dir="ltr"
+                    value={newTitleEn}
+                    onChange={(e) => setNewTitleEn(e.target.value)}
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                  />
+                </label>
+              </div>
+              <label className="block">
+                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.pageType}</span>
+                <select
+                  value={newType}
+                  onChange={(e) => setNewType(e.target.value as ContentItem["type"])}
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                >
+                  <option value="article">{c.typeArticle}</option>
+                  <option value="dua">{c.typeDua}</option>
+                  <option value="ziyara">{c.typeZiyara}</option>
+                </select>
+              </label>
+
+              {newErr && <p className="text-sm text-red-600 dark:text-red-400">{newErr}</p>}
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    const slug = newSlug.trim().toLowerCase();
+                    if (!/^[a-z0-9-]+$/.test(slug)) return setNewErr(c.slugInvalid);
+                    if (items.some((i) => i.slug === slug)) return setNewErr(c.slugTaken);
+                    if (!newTitleAr.trim()) return setNewErr(c.titleRequired);
+                    setNewErr(null);
+                    createPage(slug, newType, newTitleAr.trim(), newTitleEn.trim());
+                  }}
+                  disabled={status === "saving"}
+                  className="rounded-lg bg-[var(--primary)] px-5 py-2 text-sm font-medium text-white disabled:opacity-60"
+                >
+                  {status === "saving" ? c.saving : c.create}
+                </button>
+                <button
+                  onClick={() => setNewOpen(false)}
+                  className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm"
+                >
+                  {c.cancel}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {!editing && tab === "content" && (
         <ul className="space-y-2">
           {items.map((i) => {
             const empty = i.body.filter((b) => b.kind === "text" && !b.text_ar?.trim()).length;
@@ -334,12 +558,21 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
                     {empty > 0 ? ` · ${empty} ${c.emptySections}` : ""}
                   </p>
                 </div>
-                <button
-                  onClick={() => setEditing(i.slug)}
-                  className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-sm hover:border-[var(--accent)]"
-                >
-                  {c.edit}
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setEditing(i.slug)}
+                    className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-sm hover:border-[var(--accent)]"
+                  >
+                    {c.edit}
+                  </button>
+                  <button
+                    onClick={() => removePage(i.slug)}
+                    title={builtInSlugs.has(i.slug) ? c.builtInNote : undefined}
+                    className="rounded-lg border border-red-300 px-3 py-1.5 text-sm text-red-600 dark:border-red-800 dark:text-red-400"
+                  >
+                    {builtInSlugs.has(i.slug) ? c.hidePage : c.deletePage}
+                  </button>
+                </div>
               </li>
             );
           })}

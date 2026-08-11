@@ -69,6 +69,20 @@ RewriteRule ^wp-content/uploads/2023/03/ur-5\.png$ /images/legacy/ur-5.png [R=30
 RewriteRule ^wp-content/uploads/2023/03/ur-4-1024x576\.png$ /images/legacy/ur-4-1024x576.png [R=301,L,NC]
 RewriteRule ^wp-content/uploads/2023/09/WhatsApp-Image-2023-09-02-at-11\.14\.15-AM-1024x768\.jpeg$ /images/legacy/WhatsApp-Image-2023-09-02-at-11.14.15-AM-1024x768.jpeg [R=301,L,NC]
 
+# --- Pages created in the admin dashboard after the build ---
+# A static export only contains files generated at build time, so a page added
+# later has no HTML of its own and would 404. Serve the fallback renderer for
+# any unmatched address under a locale; it looks the address up in the database
+# and shows a normal 404 when nothing matches. This is an internal rewrite, so
+# the visitor's URL is unchanged. Real files and directories are matched first,
+# so existing pages are untouched.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ar/.+ /ar/page-view/index.html [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^en/.+ /en/page-view/index.html [L]
+
 # --- Bare domain root → default locale ---
 RewriteCond %{REQUEST_URI} ^/$
 RewriteRule ^$ /ar/ [R=301,L]
