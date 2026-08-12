@@ -87,6 +87,15 @@ RewriteRule ^en/.+ /en/page-view/index.html [L]
 RewriteCond %{REQUEST_URI} ^/$
 RewriteRule ^$ /ar/ [R=301,L]
 
+# --- Module scripts ---
+# The server does not know the .mjs extension and sends it as text/plain.
+# A browser refuses to run a module worker with a non-JavaScript type, so
+# pdf.js silently fell back to its "fake worker" on the main thread and a large
+# booklet never finished opening: the reader showed its download fallback
+# instead of the flipping book. Verified on the live server, where the worker
+# came back as text/plain while ordinary .js came back as JavaScript.
+AddType application/javascript .mjs
+
 # Custom 404
 ErrorDocument 404 /404.html
 
