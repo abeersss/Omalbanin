@@ -18,9 +18,19 @@ create table if not exists public.site_settings (
   hijri_adjustment_days int not null default 0,
   featured_dua_slug text,
   featured_ziyara_slug text,
+  -- Religious occasion the owner announces for the current day. Free text
+  -- rather than a link to content/occasions.ts, because the fixed Hijri
+  -- anniversaries are already handled there; this is for whatever the owner
+  -- wants to mark today that the calendar does not know about. Blank hides it.
+  occasion_ar text default '',
+  occasion_en text default '',
   updated_at timestamptz not null default now(),
   constraint site_settings_single_row check (id = 1)
 );
+
+-- Added after the table already existed on the live project.
+alter table public.site_settings add column if not exists occasion_ar text default '';
+alter table public.site_settings add column if not exists occasion_en text default '';
 
 create table if not exists public.content_items (
   slug text primary key,

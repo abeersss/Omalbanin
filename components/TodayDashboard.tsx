@@ -8,6 +8,7 @@ import { getTodaySelections } from "@/lib/today";
 import { siteConfig } from "@/lib/site-config";
 import { useSiteSettings } from "@/lib/useSiteSettings";
 import DashboardCard from "./DashboardCard";
+import BrandMark from "./BrandMark";
 
 function DateStrip({ locale, selected, onSelect }: { locale: Locale; selected: Date; onSelect: (d: Date) => void }) {
   const days = useMemo(() => {
@@ -55,8 +56,9 @@ function DateStrip({ locale, selected, onSelect }: { locale: Locale; selected: D
 export default function TodayDashboard({ locale }: { locale: Locale }) {
   const [now, setNow] = useState<Date | null>(null);
   const [selected, setSelected] = useState<Date | null>(null);
-  // Moon-sighting adjustment and featured overrides, as set in the dashboard.
-  const { hijriAdjustmentDays, featuredDuaSlug, featuredZiyaraSlug } = useSiteSettings();
+  // Moon-sighting adjustment, featured overrides and the announced occasion,
+  // all as set in the dashboard.
+  const { hijriAdjustmentDays, featuredDuaSlug, featuredZiyaraSlug, occasionAr, occasionEn } = useSiteSettings();
 
   useEffect(() => {
     // The visitor's real current date must come from the browser, not from
@@ -72,7 +74,8 @@ export default function TodayDashboard({ locale }: { locale: Locale }) {
     // baking a build-time date into the static HTML.
     return (
       <div className="mx-auto max-w-4xl px-4 py-10 text-center">
-        <div className="mx-auto h-8 w-64 animate-pulse rounded-full bg-[var(--border)]" />
+        <BrandMark size={44} spinning className="mx-auto" />
+        <div className="mx-auto mt-4 h-8 w-64 animate-pulse rounded-full bg-[var(--border)]" />
       </div>
     );
   }
@@ -84,6 +87,12 @@ export default function TodayDashboard({ locale }: { locale: Locale }) {
     featuredZiyaraSlug,
   });
   const isFriday = selected.getDay() === 5;
+  // What the owner typed into the dashboard, in the reader's language, falling
+  // back to the Arabic so an occasion entered only once still shows on /en/.
+  const announced = (locale === "ar" ? occasionAr : occasionEn) || occasionAr;
+  // Only for the real today: the strip lets a visitor look at other days, and
+  // an announcement written for today would be wrong sitting on top of those.
+  const showAnnounced = announced !== "" && selected.toDateString() === now.toDateString();
 
   return (
     <div id="today">
@@ -93,9 +102,10 @@ export default function TodayDashboard({ locale }: { locale: Locale }) {
         <p className="mt-2 text-[var(--ink-soft)]">{formatGregorian(selected, locale)}</p>
         <p className="mt-1 text-xs text-[var(--ink-soft)]">{siteConfig.hijriRegionLabel[locale]}</p>
 
-        {occasions.length > 0 && (
+        {(showAnnounced || occasions.length > 0) && (
           <div className="mx-auto mt-5 max-w-md rounded-2xl border border-[var(--accent)]/40 bg-[var(--accent-soft)] px-4 py-3">
             <p className="text-xs font-semibold text-[var(--accent)]">{t(locale, "today_in_calendar")}</p>
+            {showAnnounced && <p className="mt-1 font-bold text-[var(--ink)]">{announced}</p>}
             {occasions.map((o) => (
               <p key={o.id} className="mt-1 font-bold text-[var(--ink)]">
                 {locale === "ar" ? o.title_ar : o.title_en}

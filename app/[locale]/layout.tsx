@@ -38,7 +38,9 @@ export async function generateMetadata(props: LayoutProps<"/[locale]">): Promise
       type: "website",
     },
     twitter: { card: "summary_large_image", title, description },
-    icons: { icon: "/favicon.ico" },
+    // No `icons` here on purpose: app/favicon.ico, app/icon.svg and
+    // app/apple-icon.png are picked up by file convention, and declaring the
+    // field by hand replaced that whole set with the single .ico.
   };
 }
 

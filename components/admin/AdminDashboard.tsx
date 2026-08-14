@@ -61,6 +61,11 @@ const copy = {
     hijriHint: "استخدم +1 أو -1 حسب رؤية الهلال.",
     featuredDua: "دعاء اليوم المختار",
     featuredZiyara: "زيارة اليوم المختارة",
+    occasion: "مناسبة اليوم الدينية",
+    occasionHint: "تظهر في أعلى الصفحة الرئيسية اليوم فقط. اتركها فارغة إذا لم تكن هناك مناسبة.",
+    occasionAr: "المناسبة (عربي)",
+    occasionEn: "المناسبة (إنجليزي)",
+    occasionClear: "مسح المناسبة",
     auto: "تلقائي",
     notAdmin: "هذا الحساب ليس لديه صلاحية الإدارة.",
     loading: "جارٍ التحميل...",
@@ -119,6 +124,11 @@ const copy = {
     hijriHint: "Use +1 or -1 according to the moon sighting.",
     featuredDua: "Featured dua of the day",
     featuredZiyara: "Featured ziyara of the day",
+    occasion: "Religious occasion for today",
+    occasionHint: "Shown at the top of the home page for today only. Leave blank when there is no occasion.",
+    occasionAr: "Occasion (Arabic)",
+    occasionEn: "Occasion (English)",
+    occasionClear: "Clear the occasion",
     auto: "Automatic",
     notAdmin: "This account does not have admin access.",
     loading: "Loading...",
@@ -377,7 +387,17 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
   async function saveSettings(patch: Partial<SiteSettingsRow>) {
     if (!sb) return;
     setStatus("saving");
-    const next = { ...(settings ?? { id: 1, hijri_adjustment_days: 0, featured_dua_slug: null, featured_ziyara_slug: null }), ...patch };
+    const next = {
+      ...(settings ?? {
+        id: 1,
+        hijri_adjustment_days: 0,
+        featured_dua_slug: null,
+        featured_ziyara_slug: null,
+        occasion_ar: "",
+        occasion_en: "",
+      }),
+      ...patch,
+    };
     const { error } = await sb.from("site_settings").upsert({ ...next, id: 1 }, { onConflict: "id" });
     if (error) {
       setStatus("error");
@@ -613,6 +633,46 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
             />
             <span className="mt-1 block text-xs text-[var(--ink-soft)]">{c.hijriHint}</span>
           </label>
+
+          <div>
+            <p className="mb-1 text-sm">{c.occasion}</p>
+            <p className="mb-2 text-xs text-[var(--ink-soft)]">{c.occasionHint}</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {(
+                [
+                  ["occasion_ar", c.occasionAr, "rtl"],
+                  ["occasion_en", c.occasionEn, "ltr"],
+                ] as const
+              ).map(([field, label, dir]) => (
+                <label key={field} className="block">
+                  <span className="mb-1 block text-xs text-[var(--ink-soft)]">{label}</span>
+                  {/* Uncontrolled, remounted once the row arrives: saving on
+                      every keystroke would write to the database per letter,
+                      so the value is sent when the field loses focus. */}
+                  <input
+                    key={`${field}-${settings ? "ready" : "loading"}`}
+                    dir={dir}
+                    defaultValue={settings?.[field] ?? ""}
+                    onBlur={(e) => {
+                      if ((e.target.value ?? "") !== (settings?.[field] ?? "")) {
+                        saveSettings({ [field]: e.target.value } as Partial<SiteSettingsRow>);
+                      }
+                    }}
+                    placeholder={field === "occasion_ar" ? "شهادة الإمام..." : "Martyrdom of Imam..."}
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                  />
+                </label>
+              ))}
+            </div>
+            {(settings?.occasion_ar || settings?.occasion_en) && (
+              <button
+                onClick={() => saveSettings({ occasion_ar: "", occasion_en: "" })}
+                className="mt-2 text-xs text-[var(--primary)] underline"
+              >
+                {c.occasionClear}
+              </button>
+            )}
+          </div>
 
           {(
             [

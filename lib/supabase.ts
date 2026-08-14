@@ -33,4 +33,6 @@ export interface SiteSettingsRow {
   hijri_adjustment_days: number;
   featured_dua_slug: string | null;
   featured_ziyara_slug: string | null;
+  occasion_ar: string | null;
+  occasion_en: string | null;
 }

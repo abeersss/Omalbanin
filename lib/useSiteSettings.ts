@@ -42,5 +42,9 @@ export function useSiteSettings() {
     hijriAdjustmentDays: settings?.hijri_adjustment_days ?? siteConfig.hijriAdjustmentDays,
     featuredDuaSlug: settings?.featured_dua_slug ?? siteConfig.featuredDuaSlugOverride,
     featuredZiyaraSlug: settings?.featured_ziyara_slug ?? siteConfig.featuredZiyaraSlugOverride,
+    // Announced by the owner for the current day. Empty means nothing to show,
+    // so the banner disappears rather than leaving yesterday's occasion up.
+    occasionAr: settings?.occasion_ar?.trim() || "",
+    occasionEn: settings?.occasion_en?.trim() || "",
   };
 }

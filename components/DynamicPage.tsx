@@ -6,6 +6,7 @@ import { getSupabase } from "@/lib/supabase";
 import { Locale, t, defaultLocale, locales } from "@/lib/i18n";
 import { BodyBlock } from "@/content/types";
 import SectionBlock from "./SectionBlock";
+import BrandMark from "./BrandMark";
 
 type Row = {
   slug: string;
@@ -74,7 +75,8 @@ export default function DynamicPage() {
   if (state === "loading") {
     return (
       <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-        <div className="mx-auto h-8 w-56 animate-pulse rounded-full bg-[var(--border)]" />
+        <BrandMark size={44} spinning className="mx-auto" />
+        <div className="mx-auto mt-4 h-8 w-56 animate-pulse rounded-full bg-[var(--border)]" />
       </div>
     );
   }

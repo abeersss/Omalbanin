@@ -248,6 +248,24 @@ html[dir="ltr"] .page-turn-enter {
   }
 }
 
+/* Loading indicator built from the site mark. It steps in eighth-turns rather
+   than sweeping, so the star lands on its own symmetry at every pause and stays
+   readable as the logo instead of smearing into a ring. */
+@keyframes brand-mark-step {
+  0%,
+  0.01% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.brand-mark-spin {
+  transform-origin: 50% 50%;
+  animation: brand-mark-step 2.4s steps(8) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -255,8 +273,23 @@ html[dir="ltr"] .page-turn-enter {
   .page-turn-enter {
     animation: none;
   }
+  /* Fades in place instead of turning, so the wait is still visible to someone
+     who has asked the system for less movement. */
+  .brand-mark-spin {
+    animation: brand-mark-fade 1.6s ease-in-out infinite;
+  }
   * {
     transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes brand-mark-fade {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
   }
 }
 

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Locale } from "@/lib/i18n";
+import BrandMark from "./BrandMark";
 
 /**
  * Renders an uploaded PDF as a page-turning book.
@@ -108,7 +109,13 @@ export default function PdfFlipBook({ url, locale }: { url: string; locale: Loca
 
   const touch = useRef<{ x: number; y: number } | null>(null);
 
-  if (loading) return <p className="py-10 text-center text-sm text-[var(--ink-soft)]">{copy.loading}</p>;
+  if (loading)
+    return (
+      <div className="py-10 text-center">
+        <BrandMark size={44} spinning className="mx-auto" />
+        <p className="mt-3 text-sm text-[var(--ink-soft)]">{copy.loading}</p>
+      </div>
+    );
   if (error)
     return (
       <div className="rounded-xl border border-[var(--border)] p-6 text-center">

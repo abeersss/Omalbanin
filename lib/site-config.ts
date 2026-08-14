@@ -16,8 +16,8 @@ export const siteConfig = {
   /** Region label shown next to the Hijri date so visitors know which
    *  moon-sighting convention is being followed. */
   hijriRegionLabel: {
-    ar: "وفق التقويم الحسابي (قابل للتعديل يدويًا)",
-    en: "Calculated calendar (manually adjustable)",
+    ar: "وفق التقويم الحسابي",
+    en: "Calculated calendar",
   },
 
   /** Today's manually-featured content overrides. Leave null to fall back
