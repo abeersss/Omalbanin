@@ -26,29 +26,35 @@ function DateStrip({ locale, selected, onSelect }: { locale: Locale; selected: D
     : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="no-scrollbar flex gap-2 overflow-x-auto px-4 py-1" dir={locale === "ar" ? "rtl" : "ltr"}>
-      {days.map((d) => {
-        const isToday = d.toDateString() === new Date().toDateString();
-        const isSelected = d.toDateString() === selected.toDateString();
-        const dayNum = locale === "ar" ? toArabicDigits(d.getDate()) : d.getDate();
-        return (
-          <button
-            key={d.toISOString()}
-            onClick={() => onSelect(d)}
-            className={`flex min-w-[64px] flex-col items-center rounded-2xl border px-3 py-2.5 transition ${
-              isSelected
-                ? "border-[var(--primary)] bg-[var(--primary)] text-white shadow-md"
-                : isToday
-                ? "border-[var(--primary)] text-[var(--primary)]"
-                : "border-[var(--border)] text-[var(--ink-soft)] hover:bg-[var(--accent-soft)]"
-            }`}
-          >
-            <span className="text-[11px] opacity-80">{weekdayShort[d.getDay()]}</span>
-            <span className="text-lg font-bold">{dayNum}</span>
-            {isToday && <span className="text-[9px] opacity-90">{locale === "ar" ? "اليوم" : "TODAY"}</span>}
-          </button>
-        );
-      })}
+    // The scroller is what has to be full width, or a swipe would only work
+    // inside a narrow strip. The row inside it is sized to its contents and
+    // centred, so it lines up with the rest of the page when the seven days
+    // fit, and still scrolls from the leading edge when they do not.
+    <div className="no-scrollbar overflow-x-auto px-4 py-1" dir={locale === "ar" ? "rtl" : "ltr"}>
+      <div className="mx-auto flex w-max gap-2">
+        {days.map((d) => {
+          const isToday = d.toDateString() === new Date().toDateString();
+          const isSelected = d.toDateString() === selected.toDateString();
+          const dayNum = locale === "ar" ? toArabicDigits(d.getDate()) : d.getDate();
+          return (
+            <button
+              key={d.toISOString()}
+              onClick={() => onSelect(d)}
+              className={`flex min-w-[64px] flex-col items-center rounded-2xl border px-3 py-2.5 transition ${
+                isSelected
+                  ? "border-[var(--primary)] bg-[var(--primary)] text-white shadow-md"
+                  : isToday
+                    ? "border-[var(--primary)] text-[var(--primary)]"
+                    : "border-[var(--border)] text-[var(--ink-soft)] hover:bg-[var(--accent-soft)]"
+              }`}
+            >
+              <span className="text-[11px] opacity-80">{weekdayShort[d.getDay()]}</span>
+              <span className="text-lg font-bold">{dayNum}</span>
+              {isToday && <span className="text-[9px] opacity-90">{locale === "ar" ? "اليوم" : "TODAY"}</span>}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
