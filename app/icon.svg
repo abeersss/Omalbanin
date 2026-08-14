@@ -1,20 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="أم البنين">
   <!--
-    The eight-pointed star (النجمة الثمانية / رُبع الحزب): two squares laid over
-    each other at 45 degrees. It is the same geometric motif already tiled in
-    the site background, so the icon and the page read as one thing, and it is
-    purely geometric - no figure, no calligraphy of a name that would be wrong
-    to shrink to 16 pixels.
+    The crescent (الهلال). The site is built around the Hijri date, and that
+    date is decided by the sighting of the new moon, so the mark is the thing
+    the whole calendar turns on.
 
-    Only two shapes and one ring, because the browser tab renders this at 16px
-    and anything finer turns to mush at that size.
+    Drawn as two arcs rather than a mask or a subtracted circle: masks are the
+    corner of SVG that favicon rasterisers handle least reliably, while a plain
+    filled path renders identically everywhere. The outer arc sweeps the long
+    way round the left, the inner arc cuts back across the right.
+
+    The proportions were chosen by rendering candidates at 16px and looking at
+    them: a finer crescent is prettier at poster size but its horns disappear
+    in a browser tab. This one keeps a 9/64 waist, which survives the tab and
+    still reads as a crescent rather than a bitten disc.
+
+    Opening faces right, the orientation used throughout Islamic heraldry.
   -->
   <rect width="64" height="64" rx="14" fill="#14584a"/>
-  <g transform="translate(32 32)">
-    <g fill="#e6c47c">
-      <rect x="-17" y="-17" width="34" height="34" rx="3"/>
-      <rect x="-17" y="-17" width="34" height="34" rx="3" transform="rotate(45)"/>
-    </g>
-    <circle r="7.5" fill="#14584a"/>
-  </g>
+  <path
+    transform="translate(47.5 32)"
+    d="M 10.462 -17.046 A 20 20 0 1 0 10.462 17.046 A 17.5 17.5 0 1 1 10.462 -17.046 Z"
+    fill="#e6c47c"
+  />
 </svg>

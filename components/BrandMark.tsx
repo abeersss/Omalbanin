@@ -1,12 +1,13 @@
 /**
- * The site mark: the eight-pointed star that is also the browser-tab icon.
+ * The site mark: the crescent that is also the browser-tab icon.
  *
- * `spinning` turns it into the loading indicator. It rotates 45 degrees at a
- * time rather than sweeping continuously, so each step lands the star back on
- * its own symmetry and it reads as the mark throughout rather than as a blur.
+ * `spinning` turns it into the loading indicator. It steps round an eighth of a
+ * turn at a time rather than sweeping continuously, which reads as a moon
+ * moving through its places rather than as a smeared ring.
  *
  * Kept in step with app/icon.svg by hand: that file has to stay a standalone
- * SVG for the browser, so the two cannot share a source.
+ * SVG for the browser, so the two cannot share a source. The path is identical
+ * in both; only the fills differ, since this one follows the page theme.
  */
 export default function BrandMark({
   size = 48,
@@ -27,13 +28,11 @@ export default function BrandMark({
       aria-hidden={spinning ? undefined : true}
     >
       <rect width="64" height="64" rx="14" fill="var(--primary)" />
-      <g transform="translate(32 32)">
-        <g fill="var(--accent-bright)">
-          <rect x="-17" y="-17" width="34" height="34" rx="3" />
-          <rect x="-17" y="-17" width="34" height="34" rx="3" transform="rotate(45)" />
-        </g>
-        <circle r="7.5" fill="var(--primary)" />
-      </g>
+      <path
+        transform="translate(47.5 32)"
+        d="M 10.462 -17.046 A 20 20 0 1 0 10.462 17.046 A 17.5 17.5 0 1 1 10.462 -17.046 Z"
+        fill="var(--accent-bright)"
+      />
     </svg>
   );
 }
