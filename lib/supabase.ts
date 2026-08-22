@@ -1,3 +1,4 @@
+import { NavItem } from "./nav";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 /**
@@ -35,4 +36,7 @@ export interface SiteSettingsRow {
   featured_ziyara_slug: string | null;
   occasion_ar: string | null;
   occasion_en: string | null;
+  /** The top menu as arranged in the dashboard. Null means the menu that ships
+   *  with the build is used. */
+  nav: NavItem[] | null;
 }

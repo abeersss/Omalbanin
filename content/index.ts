@@ -2,12 +2,14 @@ import { legacyContent } from "./legacy";
 import { duas } from "./duas";
 import { ziyaratPlaceholders } from "./ziyarat";
 import { pageContent } from "./pages";
+import { masumeenPages } from "./masumeen";
+import { weekdayPages } from "./weekday";
 import { ContentItem } from "./types";
 
 export * from "./types";
-export { masumeen, getMasumBySlug } from "./masumeen";
+export { masumeen, getMasumBySlug, masumeenPages, masumItemSlug } from "./masumeen";
 export { occasions, getOccasionsForDate } from "./occasions";
-export { weekdayPrograms } from "./weekday";
+export { weekdayPrograms, weekdayPages, weekdayItemSlug } from "./weekday";
 export { legacyContent, getLegacyBySlug } from "./legacy";
 export { duas, getDuaBySlug } from "./duas";
 export { ziyaratPlaceholders } from "./ziyarat";
@@ -17,10 +19,17 @@ export { pageContent, getPageContent } from "./pages";
 export const allContent: ContentItem[] = [...legacyContent, ...duas, ...ziyaratPlaceholders];
 
 /** Everything the admin dashboard can edit, including the prose on pages such
- *  as Mafatih al-Jinan that would otherwise only be changeable in code. Page
- *  entries are kept out of allContent so they do not appear in search results
- *  or the sitemap as if they were separate documents. */
-export const editableContent: ContentItem[] = [...allContent, ...pageContent];
+ *  as Mafatih al-Jinan, the fourteen biographies and the weekday cards, all of
+ *  which would otherwise only be changeable in code. These entries are kept out
+ *  of allContent so they do not appear in search results or the sitemap as if
+ *  they were separate documents - each one is part of a page that already has
+ *  its own address. */
+export const editableContent: ContentItem[] = [
+  ...allContent,
+  ...pageContent,
+  ...masumeenPages,
+  ...weekdayPages,
+];
 
 export const publishedContent = allContent.filter((c) => c.published);
 

@@ -31,6 +31,9 @@ create table if not exists public.site_settings (
 -- Added after the table already existed on the live project.
 alter table public.site_settings add column if not exists occasion_ar text default '';
 alter table public.site_settings add column if not exists occasion_en text default '';
+-- The top menu, arranged in the dashboard. Null means the menu shipped in the
+-- build is used, which is also what "restore the original menu" writes back.
+alter table public.site_settings add column if not exists nav jsonb;
 
 create table if not exists public.content_items (
   slug text primary key,

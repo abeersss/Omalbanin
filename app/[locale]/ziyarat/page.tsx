@@ -1,6 +1,5 @@
 import { Locale, t, locales } from "@/lib/i18n";
-import ContentCard from "@/components/ContentCard";
-import LiveIndex from "@/components/LiveIndex";
+import LiveCardGrid from "@/components/LiveCardGrid";
 import { legacyZiyarat } from "@/content";
 import { ziyaratPlaceholders } from "@/content/ziyarat";
 import type { Metadata } from "next";
@@ -26,17 +25,7 @@ export default async function ZiyaratPage(props: PageProps<"/[locale]/ziyarat">)
           ? "الزيارات المتوفرة أدناه محفوظة كما هي من الموقع الأصلي (نصًا أو صورًا)."
           : "The visitations below are preserved as they existed on the original site (as text or images)."}
       </p>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((z) => (
-          <ContentCard key={z.slug} item={z} locale={l} href={`/${l}/ziyarat/${z.slug}`} />
-        ))}
-        <LiveIndex
-          types={["ziyara"]}
-          knownSlugs={items.map((z) => z.slug)}
-          locale={l}
-          hrefBase={`/${l}/ziyarat`}
-        />
-      </div>
+      <LiveCardGrid items={items} types={["ziyara"]} locale={l} hrefBase={`/${l}/ziyarat`} />
     </div>
   );
 }

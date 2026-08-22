@@ -17,11 +17,16 @@ export default function LivePageText({
   locale,
   staticBody,
   className = "",
+  rowClassName = "",
 }: {
   slug: string;
   locale: Locale;
   staticBody: BodyBlock[];
   className?: string;
+  /** Applied to sections that carry a verification badge. A badge marks the
+   *  section as one row of a labelled list, such as the Sources page, which
+   *  wants each row boxed while the introduction above stays plain. */
+  rowClassName?: string;
 }) {
   const [body, setBody] = useState<BodyBlock[]>(staticBody);
 
@@ -49,7 +54,7 @@ export default function LivePageText({
   return (
     <div className={className}>
       {body.map((block, i) => (
-        <div key={i} className={i > 0 ? "mt-3" : ""}>
+        <div key={i} className={`${i > 0 ? "mt-3" : ""} ${block.badge ? rowClassName : ""}`.trim()}>
           <SectionBlock block={block} locale={locale} compact />
         </div>
       ))}

@@ -6,6 +6,8 @@ import { getSupabase, SiteSettingsRow } from "@/lib/supabase";
 import { Locale } from "@/lib/i18n";
 import { editableContent, BodyBlock, ContentItem } from "@/content";
 import { slugify } from "@/lib/slug";
+import { itemUrl } from "@/lib/itemUrl";
+import { defaultNav, NavItem } from "@/lib/nav";
 import SectionEditor from "./SectionEditor";
 
 const copy = {
@@ -41,10 +43,24 @@ const copy = {
     newPageTitle: "إنشاء صفحة جديدة",
     pageAddress: "رابط الصفحة",
     pageAddressHint: "يُكتب تلقائياً من العنوان. عدّله إن أردت، بحروف إنجليزية صغيرة وشرطات فقط.",
-    pageType: "النوع",
-    typeDua: "دعاء",
-    typeZiyara: "زيارة",
-    typeArticle: "صفحة / مقال",
+    pageType: "أين تظهر هذه الصفحة؟",
+    pageTypeHint: "يحدد القسم الذي تُدرج فيه الصفحة، والرابط الذي تُفتح منه.",
+    typeDua: "في مكتبة الأدعية",
+    typeZiyara: "في مكتبة الزيارات",
+    typeArticle: "في صفحات الموقع الأصلي",
+    navTitle: "القائمة العلوية",
+    navHint: "رتّب روابط القائمة أعلى الموقع. الرابط يُكتب بدون /ar أو /en.",
+    navLabelAr: "الاسم (عربي)",
+    navLabelEn: "الاسم (إنجليزي)",
+    navPath: "الرابط",
+    navPathHint: "اتركه فارغاً للصفحة الرئيسية.",
+    navAdd: "+ إضافة رابط",
+    navRemove: "حذف",
+    navUp: "أعلى",
+    navDown: "أسفل",
+    navReset: "استعادة القائمة الأصلية",
+    navConfirmRemove: "حذف هذا الرابط من القائمة؟",
+    navConfirmReset: "استعادة القائمة الأصلية وإلغاء ترتيبك الحالي؟",
     create: "إنشاء",
     cancel: "إلغاء",
     slugTaken: "هذا العنوان مستخدم بالفعل.",
@@ -104,10 +120,24 @@ const copy = {
     newPageTitle: "Create a new page",
     pageAddress: "Page link",
     pageAddressHint: "Written for you from the title. Edit it if you like, using lowercase letters and hyphens only.",
-    pageType: "Type",
-    typeDua: "Dua",
-    typeZiyara: "Ziyara",
-    typeArticle: "Page / article",
+    pageType: "Where should this page appear?",
+    pageTypeHint: "Sets which section it is listed in, and the address it opens at.",
+    typeDua: "In the dua library",
+    typeZiyara: "In the ziyarat library",
+    typeArticle: "In the original site pages",
+    navTitle: "Top menu",
+    navHint: "Arrange the links at the top of the site. Addresses are written without /ar or /en.",
+    navLabelAr: "Name (Arabic)",
+    navLabelEn: "Name (English)",
+    navPath: "Address",
+    navPathHint: "Leave empty for the home page.",
+    navAdd: "+ Add a link",
+    navRemove: "Remove",
+    navUp: "Up",
+    navDown: "Down",
+    navReset: "Restore the original menu",
+    navConfirmRemove: "Remove this link from the menu?",
+    navConfirmReset: "Restore the original menu and discard your arrangement?",
     create: "Create",
     cancel: "Cancel",
     slugTaken: "That address is already in use.",
@@ -243,7 +273,9 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
           ? !b.pdfUrl && !b.pdfUrl_en
           : b.kind === "embed"
             ? !b.embedUrl
-            : !b.text_ar?.trim();
+            : b.kind === "facts"
+              ? !b.facts?.some((f) => f.value_ar || f.value_en)
+              : !b.text_ar?.trim();
     const emptySections = items.reduce((n, i) => n + i.body.filter(isEmpty).length, 0);
     const filled = items.reduce((n, i) => n + i.body.filter((b) => !isEmpty(b)).length, 0);
     return {
@@ -259,6 +291,23 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
    *  row can be hidden but the page itself cannot be removed from the server
    *  by deleting a database row. */
   const builtInSlugs = useMemo(() => new Set(editableContent.map((i) => i.slug)), []);
+
+  /** The menu being edited: the owner's arrangement once saved, otherwise the
+   *  one that ships with the build, so the first edit starts from what is
+   *  actually on the site rather than from an empty list. */
+  const navItems = settings?.nav && settings.nav.length > 0 ? settings.nav : defaultNav();
+
+  function patchNav(i: number, patch: Partial<NavItem>) {
+    saveSettings({ nav: navItems.map((n, x) => (x === i ? { ...n, ...patch } : n)) });
+  }
+
+  function moveNav(i: number, delta: number) {
+    const j = i + delta;
+    if (j < 0 || j >= navItems.length) return;
+    const next = [...navItems];
+    [next[i], next[j]] = [next[j], next[i]];
+    saveSettings({ nav: next });
+  }
 
   async function createPage(slug: string, type: ContentItem["type"], titleAr: string, titleEn: string) {
     if (!sb) return;
@@ -395,6 +444,7 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
         featured_ziyara_slug: null,
         occasion_ar: "",
         occasion_en: "",
+        nav: null,
       }),
       ...patch,
     };
@@ -551,6 +601,7 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
                   <option value="dua">{c.typeDua}</option>
                   <option value="ziyara">{c.typeZiyara}</option>
                 </select>
+                <span className="mt-1 block text-[11px] text-[var(--ink-soft)]">{c.pageTypeHint}</span>
               </label>
 
               {newErr && <p className="text-sm text-red-600 dark:text-red-400">{newErr}</p>}
@@ -698,6 +749,99 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
               </select>
             </label>
           ))}
+
+          <div className="border-t border-[var(--border)] pt-5">
+            <p className="mb-1 text-sm font-semibold">{c.navTitle}</p>
+            <p className="mb-3 text-xs text-[var(--ink-soft)]">{c.navHint}</p>
+
+            <div className="space-y-3">
+              {navItems.map((item, i) => (
+                <div key={i} className="rounded-lg border border-[var(--border)] p-3">
+                  <div className="mb-2 grid gap-2 sm:grid-cols-2">
+                    <label className="block">
+                      <span className="mb-1 block text-[11px] text-[var(--ink-soft)]">{c.navLabelAr}</span>
+                      <input
+                        dir="rtl"
+                        value={item.label_ar}
+                        onChange={(e) => patchNav(i, { label_ar: e.target.value })}
+                        className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="mb-1 block text-[11px] text-[var(--ink-soft)]">{c.navLabelEn}</span>
+                      <input
+                        dir="ltr"
+                        value={item.label_en}
+                        onChange={(e) => patchNav(i, { label_en: e.target.value })}
+                        className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                      />
+                    </label>
+                  </div>
+                  <label className="block">
+                    <span className="mb-1 block text-[11px] text-[var(--ink-soft)]">{c.navPath}</span>
+                    <div className="flex items-center gap-1 rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2">
+                      <span dir="ltr" className="shrink-0 text-xs text-[var(--ink-soft)]">
+                        /{locale}/
+                      </span>
+                      <input
+                        dir="ltr"
+                        value={item.path}
+                        onChange={(e) => patchNav(i, { path: e.target.value.replace(/^\/+/, "") })}
+                        placeholder="duas"
+                        className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+                      />
+                    </div>
+                    <span className="mt-1 block text-[11px] text-[var(--ink-soft)]">{c.navPathHint}</span>
+                  </label>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <button
+                      onClick={() => moveNav(i, -1)}
+                      disabled={i === 0}
+                      className="rounded border border-[var(--border)] px-2 py-1 text-xs disabled:opacity-40"
+                    >
+                      {c.navUp}
+                    </button>
+                    <button
+                      onClick={() => moveNav(i, 1)}
+                      disabled={i === navItems.length - 1}
+                      className="rounded border border-[var(--border)] px-2 py-1 text-xs disabled:opacity-40"
+                    >
+                      {c.navDown}
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (!window.confirm(c.navConfirmRemove)) return;
+                        saveSettings({ nav: navItems.filter((_, x) => x !== i) });
+                      }}
+                      className="rounded border border-red-300 px-2 py-1 text-xs text-red-600 dark:border-red-800 dark:text-red-400"
+                    >
+                      {c.navRemove}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                onClick={() => saveSettings({ nav: [...navItems, { label_ar: "", label_en: "", path: "" }] })}
+                className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs"
+              >
+                {c.navAdd}
+              </button>
+              <button
+                onClick={() => {
+                  if (!window.confirm(c.navConfirmReset)) return;
+                  // Null rather than the default list, so the menu keeps
+                  // following the build if it changes later.
+                  saveSettings({ nav: null });
+                }}
+                className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs"
+              >
+                {c.navReset}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -790,7 +934,7 @@ export default function AdminDashboard({ session, locale }: { session: Session; 
                 <div className="flex items-center gap-2">
                   {savedNotice.published && (
                     <a
-                      href={`/${locale}/${current.type === "dua" ? "duas" : current.type === "ziyara" ? "ziyarat" : "collections"}/${current.slug}/`}
+                      href={itemUrl(current, locale)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="rounded-lg bg-[var(--primary)] px-3 py-1.5 text-xs font-medium text-white"

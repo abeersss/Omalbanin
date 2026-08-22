@@ -1,3 +1,5 @@
+import { ContentItem } from "./types";
+
 export interface WeekdayPractice {
   label_ar: string;
   label_en: string;
@@ -100,3 +102,31 @@ export const weekdayPrograms: Record<string, WeekdayProgram> = {
     practices: [{ label_ar: "الاستغفار", label_en: "Istighfar", duaSlug: "istighfar" }],
   },
 };
+
+/** Address of the editable record behind one weekday card. */
+export const weekdayItemSlug = (key: string) => `weekday-${key}`;
+
+/**
+ * The weekday cards on the Mafatih al-Jinan page as editable records.
+ *
+ * The heading and the sentence under it were written into this file, so the
+ * owner could not reword them. Each day is mirrored as a normal content item:
+ * the title becomes the card heading, the summary becomes the sentence, and any
+ * sections added below appear underneath it.
+ *
+ * The practice chips stay in code. They are links into the dua library rather
+ * than prose, so editing them as free text would break the links.
+ */
+export const weekdayPages: ContentItem[] = Object.values(weekdayPrograms).map((w) => ({
+  id: weekdayItemSlug(w.key),
+  slug: weekdayItemSlug(w.key),
+  type: "article",
+  category: ["page"],
+  title_ar: w.title_ar,
+  title_en: w.title_en,
+  summary_ar: w.intro_ar,
+  summary_en: w.intro_en,
+  body: [],
+  verification_status: "site_original_media",
+  published: true,
+}));

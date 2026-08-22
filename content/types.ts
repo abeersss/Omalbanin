@@ -21,11 +21,28 @@ export interface SourceInfo {
   url?: string;
 }
 
+export interface FactRow {
+  label_ar: string;
+  label_en: string;
+  value_ar: string;
+  value_en: string;
+}
+
 export interface BodyBlock {
   /** "text" = real migrated/authored Arabic-English text. "image" = legacy image,
    * preserved verbatim rather than re-typed. "embed" = external viewer (e.g. AnyFlip / YouTube).
-   * "pdf" = an uploaded booklet, rendered in the page-turning reader. */
-  kind: "text" | "image" | "embed" | "pdf";
+   * "pdf" = an uploaded booklet, rendered in the page-turning reader.
+   * "facts" = a labelled table such as the birth/martyrdom panel on a Masum
+   * page, so those lines are editable rather than frozen in code. */
+  kind: "text" | "image" | "embed" | "pdf" | "facts";
+  /** Rows of a "facts" block. Rendered generically as label and value, so the
+   *  owner can add a line the original page never had. */
+  facts?: FactRow[];
+  /** Shows a verification badge above the section. Used by the Sources page,
+   *  where each row explains one badge: carrying the status on the block itself
+   *  means a row can be reworded or deleted without the badges sliding onto the
+   *  wrong descriptions. */
+  badge?: VerificationStatus;
   /** Uploaded PDF, shown as a flipping book rather than a download link. */
   pdfUrl?: string;
   /** English-language edition of the booklet. Falls back to pdfUrl when unset,

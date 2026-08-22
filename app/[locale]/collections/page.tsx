@@ -1,6 +1,5 @@
 import { Locale, t, locales } from "@/lib/i18n";
-import ContentCard from "@/components/ContentCard";
-import LiveIndex from "@/components/LiveIndex";
+import LiveCardGrid from "@/components/LiveCardGrid";
 import { legacyCollections } from "@/content";
 import type { Metadata } from "next";
 
@@ -24,17 +23,12 @@ export default async function CollectionsPage(props: PageProps<"/[locale]/collec
           ? "هذا المحتوى موجود على الموقع الأصلي omalbnin.com قبل إعادة التصميم، وتم الحفاظ عليه هنا مع تصنيف واضح لمصدره."
           : "This content existed on the original omalbnin.com before the redesign and is preserved here with clear source classification."}
       </p>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {legacyCollections.map((c) => (
-          <ContentCard key={c.slug} item={c} locale={l} href={`/${l}/collections/${c.slug}`} />
-        ))}
-        <LiveIndex
-          types={["collection", "article", "amal"]}
-          knownSlugs={legacyCollections.map((c) => c.slug)}
-          locale={l}
-          hrefBase={`/${l}/collections`}
-        />
-      </div>
+      <LiveCardGrid
+        items={legacyCollections}
+        types={["collection", "article", "amal"]}
+        locale={l}
+        hrefBase={`/${l}/collections`}
+      />
     </div>
   );
 }

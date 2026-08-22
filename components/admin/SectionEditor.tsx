@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BodyBlock } from "@/content/types";
+import { BodyBlock, FactRow } from "@/content/types";
 import { Locale } from "@/lib/i18n";
 import { getSupabase } from "@/lib/supabase";
 
@@ -26,6 +26,19 @@ const copy = {
     kindImage: "صورة",
     kindEmbed: "رابط خارجي",
     kindPdf: "كتاب PDF",
+    kindFacts: "جدول معلومات",
+    badge: "شارة التوثيق",
+    badgeNone: "بدون شارة",
+    badgeOriginal: "من الموقع الأصلي",
+    badgeTransmitted: "حسب المنقول",
+    badgeUnverified: "حسب المصدر",
+    badgePrimary: "مصدر أساسي موثق",
+    factLabelAr: "العنوان (عربي)",
+    factLabelEn: "العنوان (إنجليزي)",
+    factValueAr: "القيمة (عربي)",
+    factValueEn: "القيمة (إنجليزي)",
+    addFact: "+ إضافة سطر",
+    removeFact: "حذف السطر",
     headingAr: "عنوان القسم (عربي)",
     headingEn: "عنوان القسم (إنجليزي)",
     textEnFull: "النص الإنجليزي",
@@ -70,6 +83,19 @@ const copy = {
     kindImage: "Image",
     kindEmbed: "External link",
     kindPdf: "PDF book",
+    kindFacts: "Facts table",
+    badge: "Verification badge",
+    badgeNone: "No badge",
+    badgeOriginal: "From the original site",
+    badgeTransmitted: "As transmitted",
+    badgeUnverified: "Per the source",
+    badgePrimary: "Documented primary source",
+    factLabelAr: "Label (Arabic)",
+    factLabelEn: "Label (English)",
+    factValueAr: "Value (Arabic)",
+    factValueEn: "Value (English)",
+    addFact: "+ Add row",
+    removeFact: "Remove row",
     headingAr: "Section heading (Arabic)",
     headingEn: "Section heading (English)",
     textEnFull: "English text",
@@ -187,7 +213,9 @@ export default function SectionEditor({
               ? Boolean(b.pdfUrl || b.pdfUrl_en)
               : b.kind === "embed"
                 ? Boolean(b.embedUrl)
-                : Boolean(b.text_ar?.trim());
+                : b.kind === "facts"
+                  ? Boolean(b.facts?.some((f) => f.value_ar || f.value_en))
+                  : Boolean(b.text_ar?.trim());
         return (
           <div key={i} className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -232,8 +260,32 @@ export default function SectionEditor({
                 <option value="image">{c.kindImage}</option>
                 <option value="pdf">{c.kindPdf}</option>
                 <option value="embed">{c.kindEmbed}</option>
+                <option value="facts">{c.kindFacts}</option>
               </select>
             </label>
+
+            {/* Only offered on text sections, where it labels a definition such
+                as a row on the Sources page. */}
+            {b.kind === "text" && (
+              <label className="mb-3 block">
+                <span className="mb-1 block text-xs text-[var(--ink-soft)]">{c.badge}</span>
+                <select
+                  value={b.badge ?? ""}
+                  onChange={(e) =>
+                    update(i, {
+                      badge: (e.target.value || undefined) as BodyBlock["badge"],
+                    })
+                  }
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                >
+                  <option value="">{c.badgeNone}</option>
+                  <option value="site_original_media">{c.badgeOriginal}</option>
+                  <option value="traditional_practice">{c.badgeTransmitted}</option>
+                  <option value="needs_verification">{c.badgeUnverified}</option>
+                  <option value="primary_source">{c.badgePrimary}</option>
+                </select>
+              </label>
+            )}
 
             {/* Both languages are always shown. Previously each field followed
                 the dashboard's own language, so the English side of a section
@@ -281,6 +333,70 @@ export default function SectionEditor({
                     className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
                   />
                 </label>
+              </div>
+            )}
+
+            {b.kind === "facts" && (
+              <div className="mb-3 space-y-3">
+                {(b.facts ?? []).map((f, fi) => {
+                  const patchFact = (patch: Partial<FactRow>) => {
+                    const next = [...(b.facts ?? [])];
+                    next[fi] = { ...next[fi], ...patch };
+                    update(i, { facts: next });
+                  };
+                  return (
+                    <div key={fi} className="rounded-lg border border-[var(--border)] p-3">
+                      <div className="mb-2 grid gap-2 sm:grid-cols-2">
+                        <input
+                          dir="rtl"
+                          placeholder={c.factLabelAr}
+                          value={f.label_ar ?? ""}
+                          onChange={(e) => patchFact({ label_ar: e.target.value })}
+                          className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-xs"
+                        />
+                        <input
+                          dir="ltr"
+                          placeholder={c.factLabelEn}
+                          value={f.label_en ?? ""}
+                          onChange={(e) => patchFact({ label_en: e.target.value })}
+                          className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-xs"
+                        />
+                      </div>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <input
+                          dir="rtl"
+                          placeholder={c.factValueAr}
+                          value={f.value_ar ?? ""}
+                          onChange={(e) => patchFact({ value_ar: e.target.value })}
+                          className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                        />
+                        <input
+                          dir="ltr"
+                          placeholder={c.factValueEn}
+                          value={f.value_en ?? ""}
+                          onChange={(e) => patchFact({ value_en: e.target.value })}
+                          className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm"
+                        />
+                      </div>
+                      <button
+                        onClick={() => update(i, { facts: (b.facts ?? []).filter((_, x) => x !== fi) })}
+                        className="mt-2 rounded border border-red-300 px-2 py-1 text-xs text-red-600 dark:border-red-800 dark:text-red-400"
+                      >
+                        {c.removeFact}
+                      </button>
+                    </div>
+                  );
+                })}
+                <button
+                  onClick={() =>
+                    update(i, {
+                      facts: [...(b.facts ?? []), { label_ar: "", label_en: "", value_ar: "", value_en: "" }],
+                    })
+                  }
+                  className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs"
+                >
+                  {c.addFact}
+                </button>
               </div>
             )}
 

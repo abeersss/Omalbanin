@@ -46,5 +46,8 @@ export function useSiteSettings() {
     // so the banner disappears rather than leaving yesterday's occasion up.
     occasionAr: settings?.occasion_ar?.trim() || "",
     occasionEn: settings?.occasion_en?.trim() || "",
+    // Null until the owner arranges their own menu, which lets the header fall
+    // back to the one that ships with the build.
+    nav: settings?.nav && settings.nav.length > 0 ? settings.nav : null,
   };
 }

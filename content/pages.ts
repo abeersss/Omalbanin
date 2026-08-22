@@ -17,6 +17,49 @@ import { ContentItem } from "./types";
  */
 export const pageContent: ContentItem[] = [
   {
+    id: "page-sources",
+    slug: "page-sources",
+    type: "article",
+    category: ["page"],
+    title_ar: "صفحة المصادر",
+    title_en: "Sources page",
+    summary_ar: "شرح كل شارة توثيق تظهر على النصوص الدينية في الموقع.",
+    summary_en: "What each verification badge on the site's religious texts means.",
+    body: [
+      {
+        kind: "text",
+        text_ar: "كل نص ديني على هذا الموقع يحمل إحدى الشارات التالية:",
+        text_en: "Every religious text on this site carries one of the following badges:",
+      },
+      {
+        kind: "text",
+        badge: "site_original_media",
+        text_ar: "محتوى محفوظ حرفيًا من الموقع الأصلي omalbnin.com دون أي تعديل على النص الديني.",
+        text_en: "Content preserved verbatim from the original omalbnin.com, with no edits to the religious text.",
+      },
+      {
+        kind: "text",
+        badge: "traditional_practice",
+        text_ar: "ممارسة تعبدية متداولة، غير منسوبة مباشرة إلى مفاتيح الجنان أو مصدر أساسي محدد.",
+        text_en: "A devotional practice as transmitted, not directly attributed to Mafatih al-Jinan or a specific primary source.",
+      },
+      {
+        kind: "text",
+        badge: "needs_verification",
+        text_ar: "لم تُحقَّق نسبة هذا المحتوى أو صحة نصه بعد؛ لا يُنشر نص ديني كامل حتى يتم ذلك.",
+        text_en: "This content's attribution or exact wording has not yet been verified; no full religious text is published until it is.",
+      },
+      {
+        kind: "text",
+        badge: "primary_source",
+        text_ar: "تمت مطابقة النص مع مصدر أساسي محدد بالاسم (مثل طبعة معتمدة من مفاتيح الجنان).",
+        text_en: "The text has been checked against a named primary source (e.g. a trusted Mafatih al-Jinan edition).",
+      },
+    ],
+    verification_status: "site_original_media",
+    published: true,
+  },
+  {
     id: "page-mafatih",
     slug: "page-mafatih",
     type: "article",

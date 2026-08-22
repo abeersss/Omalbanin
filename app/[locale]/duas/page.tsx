@@ -1,6 +1,5 @@
 import { Locale, t, locales } from "@/lib/i18n";
-import ContentCard from "@/components/ContentCard";
-import LiveIndex from "@/components/LiveIndex";
+import LiveCardGrid from "@/components/LiveCardGrid";
 import { duas } from "@/content/duas";
 import type { Metadata } from "next";
 
@@ -24,12 +23,7 @@ export default async function DuasPage(props: PageProps<"/[locale]/duas">) {
           ? "بعض الأدعية أدناه نصوص حقيقية منقولة من الموقع الأصلي أو مصادر موثوقة، وبعضها لا يزال بانتظار نص محقق - لن نكتب دعاءً من الذاكرة دون تحقق."
           : "Some duas below carry real migrated or sourced text; others are still awaiting verified text - we won't write a supplication from memory without checking it."}
       </p>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {duas.map((d) => (
-          <ContentCard key={d.slug} item={d} locale={l} href={`/${l}/duas/${d.slug}`} />
-        ))}
-        <LiveIndex types={["dua"]} knownSlugs={duas.map((d) => d.slug)} locale={l} hrefBase={`/${l}/duas`} />
-      </div>
+      <LiveCardGrid items={duas} types={["dua"]} locale={l} hrefBase={`/${l}/duas`} />
     </div>
   );
 }

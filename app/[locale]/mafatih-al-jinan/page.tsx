@@ -1,9 +1,8 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { Locale, t, locales } from "@/lib/i18n";
-import { weekdayPrograms } from "@/content/weekday";
 import { getPageContent } from "@/content/pages";
 import LivePageText from "@/components/LivePageText";
+import LiveWeekdayList from "@/components/LiveWeekdayList";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -31,31 +30,7 @@ export default async function MafatihPage(props: PageProps<"/[locale]/mafatih-al
       />
 
       <h2 className="mb-4 text-xl font-bold text-[var(--ink)]">{l === "ar" ? "الأعمال بحسب أيام الأسبوع" : "Practices by Day of the Week"}</h2>
-      <div className="space-y-3">
-        {weekdayOrder.map((key) => {
-          const w = weekdayPrograms[key];
-          return (
-            <div key={key} className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-bold">{l === "ar" ? w.title_ar : w.title_en}</h3>
-                {key === "friday" && (
-                  <Link href={`/${l}/friday`} className="text-sm font-medium text-[var(--primary)]">
-                    {t(l, "view_all")}
-                  </Link>
-                )}
-              </div>
-              <p className="mt-1 text-sm text-[var(--ink-soft)]">{l === "ar" ? w.intro_ar : w.intro_en}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {w.practices.map((p, i) => (
-                  <span key={i} className="rounded-full border border-[var(--border)] px-3 py-1 text-xs">
-                    {l === "ar" ? p.label_ar : p.label_en}
-                  </span>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <LiveWeekdayList locale={l} order={weekdayOrder} />
 
       <h2 className="mt-10 mb-4 text-xl font-bold text-[var(--ink)]">{l === "ar" ? "الأشهر الهجرية" : "Hijri Months"}</h2>
       <p className="text-sm text-[var(--ink-soft)]">

@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { Locale, t } from "@/lib/i18n";
 import { BodyBlock } from "@/content/types";
+import VerificationBadge from "./VerificationBadge";
 
 // pdf.js is large and only needed when a booklet is actually present, so it is
 // loaded on demand rather than shipped with every page.
@@ -27,9 +28,16 @@ export default function SectionBlock({
   const note = locale === "ar" ? block.note_ar : block.note_en ?? block.note_ar;
   const text = locale === "ar" ? block.text_ar : block.text_en ?? block.text_ar;
   const awaiting = block.awaitingText || (block.kind === "text" && !text?.trim());
+  const facts = (block.facts ?? []).filter((f) => (locale === "ar" ? f.value_ar : f.value_en || f.value_ar));
 
   return (
     <>
+      {block.badge && (
+        <div className="mb-2">
+          <VerificationBadge status={block.badge} locale={locale} />
+        </div>
+      )}
+
       {heading && (
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <h2 className={`font-bold text-[var(--primary)] ${compact ? "text-lg" : "text-xl"}`}>
@@ -58,6 +66,19 @@ export default function SectionBlock({
         ) : (
           <p className="whitespace-pre-line text-[var(--ink)]">{text}</p>
         ))}
+
+      {block.kind === "facts" && facts.length > 0 && (
+        <dl className="grid gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:grid-cols-2">
+          {facts.map((f, i) => (
+            <div key={i}>
+              <dt className="text-xs font-semibold text-[var(--ink-soft)]">
+                {(locale === "ar" ? f.label_ar : f.label_en || f.label_ar) || ""}
+              </dt>
+              <dd className="mt-0.5 text-sm">{locale === "ar" ? f.value_ar : f.value_en || f.value_ar}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
 
       {block.kind === "image" && (
         // eslint-disable-next-line @next/next/no-img-element

@@ -1,4 +1,4 @@
-import { Masum } from "./types";
+import { ContentItem, Masum } from "./types";
 
 /**
  * Biographical dates below follow the dates most commonly cited in mainstream
@@ -440,6 +440,63 @@ export const masumeen: Masum[] = [
   },
 ];
 
+
 export function getMasumBySlug(slug: string) {
   return masumeen.find((m) => m.slug === slug);
 }
+
+/** Address of the editable record behind a Masum page. Prefixed so it cannot
+ *  collide with a dua or ziyara that happens to share the person's name. */
+export const masumItemSlug = (slug: string) => `masum-${slug}`;
+
+const factLabels = {
+  birth: { label_ar: "الولادة", label_en: "Birth" },
+  martyrdom: { label_ar: "الاستشهاد", label_en: "Martyrdom" },
+  kunya: { label_ar: "الكنية", label_en: "Kunya" },
+  relation: { label_ar: "النسب", label_en: "Relation" },
+};
+
+/**
+ * The fourteen pages expressed as ordinary editable records.
+ *
+ * The page itself is laid out from the Masum shape, which the dashboard editor
+ * knows nothing about, so the biography, the teachings and the dates panel were
+ * all unreachable from the dashboard. Each one is mirrored here as a normal
+ * content item: a facts block for the dates, then the biography, then one
+ * section per teaching. The pages read these back after mount, so an edit
+ * appears without a rebuild.
+ *
+ * The order is fixed: facts first, biography second, teachings after. The page
+ * reads them back by that convention, and any extra section the owner adds is
+ * shown as a further teaching.
+ */
+export const masumeenPages: ContentItem[] = masumeen.map((m) => ({
+  id: masumItemSlug(m.slug),
+  slug: masumItemSlug(m.slug),
+  type: "person",
+  title_ar: m.name_ar,
+  title_en: m.name_en,
+  summary_ar: m.title_ar,
+  summary_en: m.title_en,
+  verification_status: m.verification_status,
+  published: true,
+  body: [
+    {
+      kind: "facts",
+      facts: [
+        { ...factLabels.birth, value_ar: m.birth_ar ?? "", value_en: m.birth_en ?? "" },
+        { ...factLabels.martyrdom, value_ar: m.martyrdom_ar ?? "", value_en: m.martyrdom_en ?? "" },
+        { ...factLabels.kunya, value_ar: m.kunya_ar ?? "", value_en: m.kunya_en ?? "" },
+        { ...factLabels.relation, value_ar: m.relation_ar, value_en: m.relation_en },
+      ].filter((f) => f.value_ar || f.value_en),
+    },
+    { kind: "text", heading_ar: "نبذة", heading_en: "Biography", text_ar: m.bio_ar, text_en: m.bio_en },
+    ...m.teachings.map((teach) => ({
+      kind: "text" as const,
+      heading_ar: "من تعاليمه",
+      heading_en: "Teachings",
+      text_ar: teach.text_ar,
+      text_en: teach.text_en,
+    })),
+  ],
+}));

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Locale, t, locales } from "@/lib/i18n";
 import { masumeen, getMasumBySlug } from "@/content/masumeen";
-import VerificationBadge from "@/components/VerificationBadge";
+import LiveMasumArticle from "@/components/LiveMasumArticle";
 
 export function generateStaticParams() {
   return locales.flatMap((locale) => masumeen.map((m) => ({ locale, slug: m.slug })));
@@ -33,60 +33,7 @@ export default async function MasumPage(props: PageProps<"/[locale]/ahl-al-bayt/
         {l === "ar" ? "→" : "←"} {t(l, "the_fourteen")}
       </Link>
 
-      <header className="mb-8">
-        <VerificationBadge status={m.verification_status} locale={l} />
-        <h1 className="mt-3 text-3xl font-extrabold text-[var(--ink)]">{l === "ar" ? m.name_ar : m.name_en}</h1>
-        <p className="mt-1 text-lg text-[var(--primary)]">{l === "ar" ? m.title_ar : m.title_en}</p>
-      </header>
-
-      <dl className="mb-8 grid gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:grid-cols-2">
-        {(m.birth_ar || m.birth_en) && (
-          <div>
-            <dt className="text-xs font-semibold text-[var(--ink-soft)]">{t(l, "birth")}</dt>
-            <dd className="mt-0.5 text-sm">{l === "ar" ? m.birth_ar : m.birth_en}</dd>
-          </div>
-        )}
-        {(m.martyrdom_ar || m.martyrdom_en) && (
-          <div>
-            <dt className="text-xs font-semibold text-[var(--ink-soft)]">{t(l, "martyrdom")}</dt>
-            <dd className="mt-0.5 text-sm">{l === "ar" ? m.martyrdom_ar : m.martyrdom_en}</dd>
-          </div>
-        )}
-        <div className="sm:col-span-2">
-          <dt className="text-xs font-semibold text-[var(--ink-soft)]">{t(l, "relation")}</dt>
-          <dd className="mt-0.5 text-sm">{l === "ar" ? m.relation_ar : m.relation_en}</dd>
-        </div>
-      </dl>
-
-      <article className="prose-none space-y-4 text-[var(--ink)] leading-8">
-        <p className="whitespace-pre-line">{l === "ar" ? m.bio_ar : m.bio_en}</p>
-      </article>
-
-      {m.teachings.length > 0 && (
-        <div className="mt-8">
-          <h2 className="mb-3 text-lg font-bold text-[var(--primary)]">{t(l, "teachings")}</h2>
-          <ul className="space-y-3">
-            {m.teachings.map((teach, i) => (
-              <li key={i} className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 text-sm leading-7">
-                {l === "ar" ? teach.text_ar : teach.text_en}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {m.occasions.length > 0 && (
-        <div className="mt-8">
-          <h2 className="mb-3 text-lg font-bold text-[var(--primary)]">{t(l, "occasions_related")}</h2>
-          <div className="flex flex-wrap gap-2">
-            {m.occasions.map((o, i) => (
-              <span key={i} className="rounded-full border border-[var(--border)] px-3 py-1.5 text-sm">
-                {l === "ar" ? o.label_ar : o.label_en}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
+      <LiveMasumArticle masum={m} locale={l} />
 
       {m.related_content.length > 0 && (
         <div className="mt-8">
